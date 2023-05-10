@@ -20,6 +20,26 @@
                 <span class="help-block">{{ trans('cruds.doctor.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="email">{{ trans('cruds.doctor.fields.email') }}</label>
+                <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="email" name="email" id="email" value="{{ old('email') }}" required>
+                @if($errors->has('email'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('email') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.doctor.fields.email_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="mobile_number">{{ trans('cruds.doctor.fields.mobile_number') }}</label>
+                <input class="form-control {{ $errors->has('mobile_number') ? 'is-invalid' : '' }}" type="text" name="mobile_number" id="mobile_number" value="{{ old('mobile_number', '') }}" required>
+                @if($errors->has('mobile_number'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('mobile_number') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.doctor.fields.mobile_number_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="clinic_ids_id">{{ trans('cruds.doctor.fields.clinic_ids') }}</label>
                 <select class="form-control select2 {{ $errors->has('clinic_ids') ? 'is-invalid' : '' }}" name="clinic_ids_id" id="clinic_ids_id">
                     @foreach($clinic_ids as $id => $entry)
