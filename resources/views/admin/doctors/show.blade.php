@@ -33,6 +33,22 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.doctor.fields.email') }}
+                        </th>
+                        <td>
+                            {{ $doctor->email }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.doctor.fields.mobile_number') }}
+                        </th>
+                        <td>
+                            {{ $doctor->mobile_number }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.doctor.fields.clinic_ids') }}
                         </th>
                         <td>

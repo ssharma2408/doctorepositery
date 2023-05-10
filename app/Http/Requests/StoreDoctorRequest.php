@@ -21,6 +21,15 @@ class StoreDoctorRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'email' => [
+                'required',
+                'unique:doctors',
+            ],
+            'mobile_number' => [
+                'string',
+                'required',
+                'unique:doctors',
+            ],
         ];
     }
 }

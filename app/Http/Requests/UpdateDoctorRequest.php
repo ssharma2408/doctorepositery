@@ -21,6 +21,15 @@ class UpdateDoctorRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'email' => [
+                'required',
+                'unique:doctors,email,' . request()->route('doctor')->id,
+            ],
+            'mobile_number' => [
+                'string',
+                'required',
+                'unique:doctors,mobile_number,' . request()->route('doctor')->id,
+            ],
         ];
     }
 }
