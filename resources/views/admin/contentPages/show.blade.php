@@ -81,10 +81,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.contentPage.fields.clinic_ids') }}
+                            {{ trans('cruds.contentPage.fields.clinic') }}
                         </th>
                         <td>
-                            {{ $contentPage->clinic_ids->name ?? '' }}
+                            {{ $contentPage->clinic->name ?? '' }}
                         </td>
                     </tr>
                 </tbody>

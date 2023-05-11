@@ -35,7 +35,7 @@ class UpdateStaffRequest extends FormRequest
                 'required',
                 'unique:staffs,username,' . request()->route('staff')->id,
             ],
-            'clinic_ids_id' => [
+            'clinic_id' => [
                 'required',
                 'integer',
             ],

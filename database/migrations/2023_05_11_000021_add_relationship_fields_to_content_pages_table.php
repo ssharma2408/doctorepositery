@@ -9,8 +9,8 @@ class AddRelationshipFieldsToContentPagesTable extends Migration
     public function up()
     {
         Schema::table('content_pages', function (Blueprint $table) {
-            $table->unsignedBigInteger('clinic_ids_id')->nullable();
-            $table->foreign('clinic_ids_id', 'clinic_ids_fk_8465960')->references('id')->on('clinics');
+            $table->unsignedBigInteger('clinic_id')->nullable();
+            $table->foreign('clinic_id', 'clinic_fk_8467037')->references('id')->on('clinics');
         });
     }
 }

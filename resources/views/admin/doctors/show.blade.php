@@ -49,10 +49,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.doctor.fields.clinic_ids') }}
+                            {{ trans('cruds.doctor.fields.clinic') }}
                         </th>
                         <td>
-                            {{ $doctor->clinic_ids->name ?? '' }}
+                            {{ $doctor->clinic->name ?? '' }}
                         </td>
                     </tr>
                 </tbody>

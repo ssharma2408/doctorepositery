@@ -35,7 +35,7 @@
                             {{ trans('cruds.doctor.fields.mobile_number') }}
                         </th>
                         <th>
-                            {{ trans('cruds.doctor.fields.clinic_ids') }}
+                            {{ trans('cruds.doctor.fields.clinic') }}
                         </th>
                         <th>
                             &nbsp;
@@ -61,7 +61,7 @@
                                 {{ $doctor->mobile_number ?? '' }}
                             </td>
                             <td>
-                                {{ $doctor->clinic_ids->name ?? '' }}
+                                {{ $doctor->clinic->name ?? '' }}
                             </td>
                             <td>
                                 @can('doctor_show')

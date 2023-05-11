@@ -25,7 +25,7 @@ class StoreContentTagRequest extends FormRequest
                 'string',
                 'nullable',
             ],
-            'clinic_ids_id' => [
+            'clinic_id' => [
                 'required',
                 'integer',
             ],

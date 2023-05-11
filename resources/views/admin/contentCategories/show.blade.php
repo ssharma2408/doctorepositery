@@ -41,10 +41,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.contentCategory.fields.clinic_ids') }}
+                            {{ trans('cruds.contentCategory.fields.clinic') }}
                         </th>
                         <td>
-                            {{ $contentCategory->clinic_ids->name ?? '' }}
+                            {{ $contentCategory->clinic->name ?? '' }}
                         </td>
                     </tr>
                 </tbody>

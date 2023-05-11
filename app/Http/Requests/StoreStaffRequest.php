@@ -38,7 +38,7 @@ class StoreStaffRequest extends FormRequest
             'password' => [
                 'required',
             ],
-            'clinic_ids_id' => [
+            'clinic_id' => [
                 'required',
                 'integer',
             ],
