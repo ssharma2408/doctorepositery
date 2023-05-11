@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
+ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
     // Permissions
     Route::apiResource('permissions', 'PermissionsApiController');
 
@@ -21,5 +21,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('doctors', 'DoctorApiController');
 
     // Staff
-    Route::apiResource('staffs', 'StaffApiController');
+    Route::apiResource('staffs', 'StaffApiController');	
+});
+
+Route::controller(Api\V1\Admin\RegisterController::class)->group(function(){
+    Route::post('register', 'register');
+    Route::post('login', 'login');
 });
