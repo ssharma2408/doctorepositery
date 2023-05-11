@@ -17,7 +17,7 @@ class DoctorApiController extends Controller
     {
         abort_if(Gate::denies('doctor_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new DoctorResource(Doctor::with(['clinic_ids'])->get());
+        return new DoctorResource(Doctor::with(['clinic'])->get());
     }
 
     public function store(StoreDoctorRequest $request)
@@ -33,7 +33,7 @@ class DoctorApiController extends Controller
     {
         abort_if(Gate::denies('doctor_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new DoctorResource($doctor->load(['clinic_ids']));
+        return new DoctorResource($doctor->load(['clinic']));
     }
 
     public function update(UpdateDoctorRequest $request, Doctor $doctor)

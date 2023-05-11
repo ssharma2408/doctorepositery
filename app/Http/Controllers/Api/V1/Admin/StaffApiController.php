@@ -17,7 +17,7 @@ class StaffApiController extends Controller
     {
         abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new StaffResource(Staff::with(['clinic_ids'])->get());
+        return new StaffResource(Staff::with(['clinic'])->get());
     }
 
     public function store(StoreStaffRequest $request)
@@ -33,7 +33,7 @@ class StaffApiController extends Controller
     {
         abort_if(Gate::denies('staff_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new StaffResource($staff->load(['clinic_ids']));
+        return new StaffResource($staff->load(['clinic']));
     }
 
     public function update(UpdateStaffRequest $request, Staff $staff)

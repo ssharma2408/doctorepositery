@@ -30,7 +30,7 @@ class ContentPage extends Model implements HasMedia
         'title',
         'page_text',
         'excerpt',
-        'clinic_ids_id',
+        'clinic_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -69,8 +69,8 @@ class ContentPage extends Model implements HasMedia
         return $file;
     }
 
-    public function clinic_ids()
+    public function clinic()
     {
-        return $this->belongsTo(Clinic::class, 'clinic_ids_id');
+        return $this->belongsTo(Clinic::class, 'clinic_id');
     }
 }

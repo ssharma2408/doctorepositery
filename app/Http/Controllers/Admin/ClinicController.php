@@ -23,7 +23,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinics = Clinic::with(['package_ids', 'clinic_adminid'])->get();
+        $clinics = Clinic::with(['package', 'clinic_admin'])->get();
 
         return view('admin.clinics.index', compact('clinics'));
     }
@@ -32,11 +32,11 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $package_ids = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $packages = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic_adminids = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clinics.create', compact('clinic_adminids', 'package_ids'));
+        return view('admin.clinics.create', compact('clinic_admins', 'packages'));
     }
 
     public function store(StoreClinicRequest $request)
@@ -54,13 +54,13 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $package_ids = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $packages = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic_adminids = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic->load('package_ids', 'clinic_adminid');
+        $clinic->load('package', 'clinic_admin');
 
-        return view('admin.clinics.edit', compact('clinic', 'clinic_adminids', 'package_ids'));
+        return view('admin.clinics.edit', compact('clinic', 'clinic_admins', 'packages'));
     }
 
     public function update(UpdateClinicRequest $request, Clinic $clinic)
@@ -74,7 +74,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic->load('package_ids', 'clinic_adminid', 'clinicIdsDoctors', 'clinicIdsStaffs');
+        $clinic->load('package', 'clinic_admin');
 
         return view('admin.clinics.show', compact('clinic'));
     }

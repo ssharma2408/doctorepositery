@@ -33,7 +33,7 @@ class StoreContentPageRequest extends FormRequest
             'tags' => [
                 'array',
             ],
-            'clinic_ids_id' => [
+            'clinic_id' => [
                 'required',
                 'integer',
             ],

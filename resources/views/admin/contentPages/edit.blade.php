@@ -88,18 +88,18 @@
                 <span class="help-block">{{ trans('cruds.contentPage.fields.featured_image_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="clinic_ids_id">{{ trans('cruds.contentPage.fields.clinic_ids') }}</label>
-                <select class="form-control select2 {{ $errors->has('clinic_ids') ? 'is-invalid' : '' }}" name="clinic_ids_id" id="clinic_ids_id" required>
-                    @foreach($clinic_ids as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('clinic_ids_id') ? old('clinic_ids_id') : $contentPage->clinic_ids->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                <label class="required" for="clinic_id">{{ trans('cruds.contentPage.fields.clinic') }}</label>
+                <select class="form-control select2 {{ $errors->has('clinic') ? 'is-invalid' : '' }}" name="clinic_id" id="clinic_id" required>
+                    @foreach($clinics as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('clinic_id') ? old('clinic_id') : $contentPage->clinic->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
                 </select>
-                @if($errors->has('clinic_ids'))
+                @if($errors->has('clinic'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('clinic_ids') }}
+                        {{ $errors->first('clinic') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.contentPage.fields.clinic_ids_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.contentPage.fields.clinic_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

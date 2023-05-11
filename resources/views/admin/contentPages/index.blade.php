@@ -41,7 +41,7 @@
                             {{ trans('cruds.contentPage.fields.featured_image') }}
                         </th>
                         <th>
-                            {{ trans('cruds.contentPage.fields.clinic_ids') }}
+                            {{ trans('cruds.contentPage.fields.clinic') }}
                         </th>
                         <th>
                             &nbsp;
@@ -81,7 +81,7 @@
                                 @endif
                             </td>
                             <td>
-                                {{ $contentPage->clinic_ids->name ?? '' }}
+                                {{ $contentPage->clinic->name ?? '' }}
                             </td>
                             <td>
                                 @can('content_page_show')

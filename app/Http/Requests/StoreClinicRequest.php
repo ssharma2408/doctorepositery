@@ -24,11 +24,7 @@ class StoreClinicRequest extends FormRequest
             'address' => [
                 'required',
             ],
-            'package_ids_id' => [
-                'required',
-                'integer',
-            ],
-            'clinic_adminid_id' => [
+            'package_id' => [
                 'required',
                 'integer',
             ],
