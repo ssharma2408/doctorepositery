@@ -32,6 +32,9 @@
                             {{ trans('cruds.clinic.fields.package_ids') }}
                         </th>
                         <th>
+                            {{ trans('cruds.clinic.fields.clinic_adminid') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -50,6 +53,9 @@
                             </td>
                             <td>
                                 {{ $clinic->package_ids->package ?? '' }}
+                            </td>
+                            <td>
+                                {{ $clinic->clinic_adminid->name ?? '' }}
                             </td>
                             <td>
                                 @can('clinic_show')

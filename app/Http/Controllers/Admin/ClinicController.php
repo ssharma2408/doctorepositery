@@ -9,6 +9,7 @@ use App\Http\Requests\StoreClinicRequest;
 use App\Http\Requests\UpdateClinicRequest;
 use App\Models\Clinic;
 use App\Models\Package;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -22,7 +23,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinics = Clinic::with(['package_ids'])->get();
+        $clinics = Clinic::with(['package_ids', 'clinic_adminid'])->get();
 
         return view('admin.clinics.index', compact('clinics'));
     }
@@ -33,7 +34,9 @@ class ClinicController extends Controller
 
         $package_ids = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clinics.create', compact('package_ids'));
+        $clinic_adminids = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.clinics.create', compact('clinic_adminids', 'package_ids'));
     }
 
     public function store(StoreClinicRequest $request)
@@ -53,9 +56,11 @@ class ClinicController extends Controller
 
         $package_ids = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic->load('package_ids');
+        $clinic_adminids = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clinics.edit', compact('clinic', 'package_ids'));
+        $clinic->load('package_ids', 'clinic_adminid');
+
+        return view('admin.clinics.edit', compact('clinic', 'clinic_adminids', 'package_ids'));
     }
 
     public function update(UpdateClinicRequest $request, Clinic $clinic)
@@ -69,7 +74,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic->load('package_ids', 'clinicIdsDoctors', 'clinicIdsStaffs');
+        $clinic->load('package_ids', 'clinic_adminid', 'clinicIdsDoctors', 'clinicIdsStaffs');
 
         return view('admin.clinics.show', compact('clinic'));
     }

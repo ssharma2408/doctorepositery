@@ -26,6 +26,7 @@ class Clinic extends Model implements HasMedia
         'name',
         'address',
         'package_ids_id',
+        'clinic_adminid_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -55,5 +56,10 @@ class Clinic extends Model implements HasMedia
     public function package_ids()
     {
         return $this->belongsTo(Package::class, 'package_ids_id');
+    }
+
+    public function clinic_adminid()
+    {
+        return $this->belongsTo(User::class, 'clinic_adminid_id');
     }
 }
