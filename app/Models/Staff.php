@@ -29,6 +29,7 @@ class Staff extends Model
         'mobile_number',
         'username',
         'password',
+        'clinic_ids_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -37,5 +38,10 @@ class Staff extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    public function clinic_ids()
+    {
+        return $this->belongsTo(Clinic::class, 'clinic_ids_id');
     }
 }

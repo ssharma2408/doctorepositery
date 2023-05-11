@@ -63,6 +63,14 @@
                             ********
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.staff.fields.clinic_ids') }}
+                        </th>
+                        <td>
+                            {{ $staff->clinic_ids->name ?? '' }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">
