@@ -1,5 +1,4 @@
 <?php
-
 Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
     // Package
     Route::apiResource('packages', 'PackageApiController');
@@ -12,6 +11,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('doctors', 'DoctorApiController');
 
     // Staff
+
     Route::apiResource('staffs', 'StaffApiController');
 
     // Content Category
@@ -23,4 +23,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Content Page
     Route::post('content-pages/media', 'ContentPageApiController@storeMedia')->name('content-pages.storeMedia');
     Route::apiResource('content-pages', 'ContentPageApiController');
+});
+
+Route::controller(Api\V1\Admin\RegisterController::class)->group(function(){
+    Route::post('register', 'register');
+    Route::post('login', 'login');
 });
