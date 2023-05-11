@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyStaffRequest;
 use App\Http\Requests\StoreStaffRequest;
 use App\Http\Requests\UpdateStaffRequest;
+use App\Models\Clinic;
 use App\Models\Staff;
 use Gate;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class StaffController extends Controller
     {
         abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $staffs = Staff::all();
+        $staffs = Staff::with(['clinic_ids'])->get();
 
         return view('admin.staffs.index', compact('staffs'));
     }
@@ -26,7 +27,9 @@ class StaffController extends Controller
     {
         abort_if(Gate::denies('staff_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.staffs.create');
+        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.staffs.create', compact('clinic_ids'));
     }
 
     public function store(StoreStaffRequest $request)
@@ -40,7 +43,11 @@ class StaffController extends Controller
     {
         abort_if(Gate::denies('staff_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.staffs.edit', compact('staff'));
+        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $staff->load('clinic_ids');
+
+        return view('admin.staffs.edit', compact('clinic_ids', 'staff'));
     }
 
     public function update(UpdateStaffRequest $request, Staff $staff)
@@ -53,6 +60,8 @@ class StaffController extends Controller
     public function show(Staff $staff)
     {
         abort_if(Gate::denies('staff_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $staff->load('clinic_ids');
 
         return view('admin.staffs.show', compact('staff'));
     }

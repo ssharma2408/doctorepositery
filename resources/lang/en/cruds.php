@@ -145,6 +145,8 @@ return [
             'username_helper'      => ' ',
             'password'             => 'Password',
             'password_helper'      => ' ',
+            'clinic_ids'           => 'Clinic Ids',
+            'clinic_ids_helper'    => ' ',
         ],
     ],
 
