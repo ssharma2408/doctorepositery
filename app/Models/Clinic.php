@@ -25,8 +25,8 @@ class Clinic extends Model implements HasMedia
     protected $fillable = [
         'name',
         'address',
-        'package_ids_id',
-        'clinic_adminid_id',
+        'package_id',
+        'clinic_admin_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -43,23 +43,13 @@ class Clinic extends Model implements HasMedia
         $this->addMediaConversion('preview')->fit('crop', 120, 120);
     }
 
-    public function clinicIdsDoctors()
+    public function package()
     {
-        return $this->hasMany(Doctor::class, 'clinic_ids_id', 'id');
+        return $this->belongsTo(Package::class, 'package_id');
     }
 
-    public function clinicIdsStaffs()
+    public function clinic_admin()
     {
-        return $this->hasMany(Staff::class, 'clinic_ids_id', 'id');
-    }
-
-    public function package_ids()
-    {
-        return $this->belongsTo(Package::class, 'package_ids_id');
-    }
-
-    public function clinic_adminid()
-    {
-        return $this->belongsTo(User::class, 'clinic_adminid_id');
+        return $this->belongsTo(User::class, 'clinic_admin_id');
     }
 }

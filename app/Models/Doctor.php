@@ -23,7 +23,7 @@ class Doctor extends Model
         'name',
         'email',
         'mobile_number',
-        'clinic_ids_id',
+        'clinic_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -34,8 +34,8 @@ class Doctor extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function clinic_ids()
+    public function clinic()
     {
-        return $this->belongsTo(Clinic::class, 'clinic_ids_id');
+        return $this->belongsTo(Clinic::class, 'clinic_id');
     }
 }

@@ -18,7 +18,7 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $doctors = Doctor::with(['clinic_ids'])->get();
+        $doctors = Doctor::with(['clinic'])->get();
 
         return view('admin.doctors.index', compact('doctors'));
     }
@@ -27,9 +27,9 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.doctors.create', compact('clinic_ids'));
+        return view('admin.doctors.create', compact('clinics'));
     }
 
     public function store(StoreDoctorRequest $request)
@@ -43,11 +43,11 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctor->load('clinic_ids');
+        $doctor->load('clinic');
 
-        return view('admin.doctors.edit', compact('clinic_ids', 'doctor'));
+        return view('admin.doctors.edit', compact('clinics', 'doctor'));
     }
 
     public function update(UpdateDoctorRequest $request, Doctor $doctor)
@@ -61,7 +61,7 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $doctor->load('clinic_ids');
+        $doctor->load('clinic');
 
         return view('admin.doctors.show', compact('doctor'));
     }

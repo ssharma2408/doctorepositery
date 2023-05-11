@@ -18,7 +18,7 @@ class ContentTagController extends Controller
     {
         abort_if(Gate::denies('content_tag_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $contentTags = ContentTag::with(['clinic_ids'])->get();
+        $contentTags = ContentTag::with(['clinic'])->get();
 
         return view('admin.contentTags.index', compact('contentTags'));
     }
@@ -27,9 +27,9 @@ class ContentTagController extends Controller
     {
         abort_if(Gate::denies('content_tag_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.contentTags.create', compact('clinic_ids'));
+        return view('admin.contentTags.create', compact('clinics'));
     }
 
     public function store(StoreContentTagRequest $request)
@@ -43,11 +43,11 @@ class ContentTagController extends Controller
     {
         abort_if(Gate::denies('content_tag_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $contentTag->load('clinic_ids');
+        $contentTag->load('clinic');
 
-        return view('admin.contentTags.edit', compact('clinic_ids', 'contentTag'));
+        return view('admin.contentTags.edit', compact('clinics', 'contentTag'));
     }
 
     public function update(UpdateContentTagRequest $request, ContentTag $contentTag)
@@ -61,7 +61,7 @@ class ContentTagController extends Controller
     {
         abort_if(Gate::denies('content_tag_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $contentTag->load('clinic_ids');
+        $contentTag->load('clinic');
 
         return view('admin.contentTags.show', compact('contentTag'));
     }

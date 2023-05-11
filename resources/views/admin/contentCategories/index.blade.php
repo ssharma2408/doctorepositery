@@ -32,7 +32,7 @@
                             {{ trans('cruds.contentCategory.fields.slug') }}
                         </th>
                         <th>
-                            {{ trans('cruds.contentCategory.fields.clinic_ids') }}
+                            {{ trans('cruds.contentCategory.fields.clinic') }}
                         </th>
                         <th>
                             &nbsp;
@@ -55,7 +55,7 @@
                                 {{ $contentCategory->slug ?? '' }}
                             </td>
                             <td>
-                                {{ $contentCategory->clinic_ids->name ?? '' }}
+                                {{ $contentCategory->clinic->name ?? '' }}
                             </td>
                             <td>
                                 @can('content_category_show')

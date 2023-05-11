@@ -32,7 +32,7 @@
                             {{ trans('cruds.contentTag.fields.slug') }}
                         </th>
                         <th>
-                            {{ trans('cruds.contentTag.fields.clinic_ids') }}
+                            {{ trans('cruds.contentTag.fields.clinic') }}
                         </th>
                         <th>
                             &nbsp;
@@ -55,7 +55,7 @@
                                 {{ $contentTag->slug ?? '' }}
                             </td>
                             <td>
-                                {{ $contentTag->clinic_ids->name ?? '' }}
+                                {{ $contentTag->clinic->name ?? '' }}
                             </td>
                             <td>
                                 @can('content_tag_show')

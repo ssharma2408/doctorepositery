@@ -24,7 +24,7 @@ class ContentPageController extends Controller
     {
         abort_if(Gate::denies('content_page_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $contentPages = ContentPage::with(['categories', 'tags', 'clinic_ids', 'media'])->get();
+        $contentPages = ContentPage::with(['categories', 'tags', 'clinic', 'media'])->get();
 
         return view('admin.contentPages.index', compact('contentPages'));
     }
@@ -37,9 +37,9 @@ class ContentPageController extends Controller
 
         $tags = ContentTag::pluck('name', 'id');
 
-        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.contentPages.create', compact('categories', 'clinic_ids', 'tags'));
+        return view('admin.contentPages.create', compact('categories', 'clinics', 'tags'));
     }
 
     public function store(StoreContentPageRequest $request)
@@ -66,11 +66,11 @@ class ContentPageController extends Controller
 
         $tags = ContentTag::pluck('name', 'id');
 
-        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $contentPage->load('categories', 'tags', 'clinic_ids');
+        $contentPage->load('categories', 'tags', 'clinic');
 
-        return view('admin.contentPages.edit', compact('categories', 'clinic_ids', 'contentPage', 'tags'));
+        return view('admin.contentPages.edit', compact('categories', 'clinics', 'contentPage', 'tags'));
     }
 
     public function update(UpdateContentPageRequest $request, ContentPage $contentPage)
@@ -96,7 +96,7 @@ class ContentPageController extends Controller
     {
         abort_if(Gate::denies('content_page_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $contentPage->load('categories', 'tags', 'clinic_ids');
+        $contentPage->load('categories', 'tags', 'clinic');
 
         return view('admin.contentPages.show', compact('contentPage'));
     }

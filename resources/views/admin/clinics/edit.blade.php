@@ -31,32 +31,32 @@
                 <span class="help-block">{{ trans('cruds.clinic.fields.address_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="package_ids_id">{{ trans('cruds.clinic.fields.package_ids') }}</label>
-                <select class="form-control select2 {{ $errors->has('package_ids') ? 'is-invalid' : '' }}" name="package_ids_id" id="package_ids_id" required>
-                    @foreach($package_ids as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('package_ids_id') ? old('package_ids_id') : $clinic->package_ids->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                <label class="required" for="package_id">{{ trans('cruds.clinic.fields.package') }}</label>
+                <select class="form-control select2 {{ $errors->has('package') ? 'is-invalid' : '' }}" name="package_id" id="package_id" required>
+                    @foreach($packages as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('package_id') ? old('package_id') : $clinic->package->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
                 </select>
-                @if($errors->has('package_ids'))
+                @if($errors->has('package'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('package_ids') }}
+                        {{ $errors->first('package') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.clinic.fields.package_ids_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.clinic.fields.package_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="clinic_adminid_id">{{ trans('cruds.clinic.fields.clinic_adminid') }}</label>
-                <select class="form-control select2 {{ $errors->has('clinic_adminid') ? 'is-invalid' : '' }}" name="clinic_adminid_id" id="clinic_adminid_id" required>
-                    @foreach($clinic_adminids as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('clinic_adminid_id') ? old('clinic_adminid_id') : $clinic->clinic_adminid->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                <label for="clinic_admin_id">{{ trans('cruds.clinic.fields.clinic_admin') }}</label>
+                <select class="form-control select2 {{ $errors->has('clinic_admin') ? 'is-invalid' : '' }}" name="clinic_admin_id" id="clinic_admin_id">
+                    @foreach($clinic_admins as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('clinic_admin_id') ? old('clinic_admin_id') : $clinic->clinic_admin->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
                 </select>
-                @if($errors->has('clinic_adminid'))
+                @if($errors->has('clinic_admin'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('clinic_adminid') }}
+                        {{ $errors->first('clinic_admin') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.clinic.fields.clinic_adminid_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.clinic.fields.clinic_admin_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

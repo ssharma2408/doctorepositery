@@ -41,18 +41,18 @@
                 <span class="help-block">{{ trans('cruds.doctor.fields.mobile_number_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="clinic_ids_id">{{ trans('cruds.doctor.fields.clinic_ids') }}</label>
-                <select class="form-control select2 {{ $errors->has('clinic_ids') ? 'is-invalid' : '' }}" name="clinic_ids_id" id="clinic_ids_id">
-                    @foreach($clinic_ids as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('clinic_ids_id') ? old('clinic_ids_id') : $doctor->clinic_ids->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                <label for="clinic_id">{{ trans('cruds.doctor.fields.clinic') }}</label>
+                <select class="form-control select2 {{ $errors->has('clinic') ? 'is-invalid' : '' }}" name="clinic_id" id="clinic_id">
+                    @foreach($clinics as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('clinic_id') ? old('clinic_id') : $doctor->clinic->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
                 </select>
-                @if($errors->has('clinic_ids'))
+                @if($errors->has('clinic'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('clinic_ids') }}
+                        {{ $errors->first('clinic') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.doctor.fields.clinic_ids_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.doctor.fields.clinic_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

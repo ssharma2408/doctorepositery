@@ -18,7 +18,7 @@ class ContentCategoryController extends Controller
     {
         abort_if(Gate::denies('content_category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $contentCategories = ContentCategory::with(['clinic_ids'])->get();
+        $contentCategories = ContentCategory::with(['clinic'])->get();
 
         return view('admin.contentCategories.index', compact('contentCategories'));
     }
@@ -27,9 +27,9 @@ class ContentCategoryController extends Controller
     {
         abort_if(Gate::denies('content_category_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.contentCategories.create', compact('clinic_ids'));
+        return view('admin.contentCategories.create', compact('clinics'));
     }
 
     public function store(StoreContentCategoryRequest $request)
@@ -43,11 +43,11 @@ class ContentCategoryController extends Controller
     {
         abort_if(Gate::denies('content_category_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic_ids = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $contentCategory->load('clinic_ids');
+        $contentCategory->load('clinic');
 
-        return view('admin.contentCategories.edit', compact('clinic_ids', 'contentCategory'));
+        return view('admin.contentCategories.edit', compact('clinics', 'contentCategory'));
     }
 
     public function update(UpdateContentCategoryRequest $request, ContentCategory $contentCategory)
@@ -61,7 +61,7 @@ class ContentCategoryController extends Controller
     {
         abort_if(Gate::denies('content_category_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $contentCategory->load('clinic_ids');
+        $contentCategory->load('clinic');
 
         return view('admin.contentCategories.show', compact('contentCategory'));
     }
