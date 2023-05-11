@@ -47,6 +47,11 @@ class Clinic extends Model implements HasMedia
         return $this->hasMany(Doctor::class, 'clinic_ids_id', 'id');
     }
 
+    public function clinicIdsStaffs()
+    {
+        return $this->hasMany(Staff::class, 'clinic_ids_id', 'id');
+    }
+
     public function package_ids()
     {
         return $this->belongsTo(Package::class, 'package_ids_id');

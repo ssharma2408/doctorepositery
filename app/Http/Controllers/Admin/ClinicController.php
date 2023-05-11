@@ -69,7 +69,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic->load('package_ids', 'clinicIdsDoctors');
+        $clinic->load('package_ids', 'clinicIdsDoctors', 'clinicIdsStaffs');
 
         return view('admin.clinics.show', compact('clinic'));
     }
