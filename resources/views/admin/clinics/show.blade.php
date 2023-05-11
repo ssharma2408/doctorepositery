@@ -47,6 +47,14 @@
                             {{ $clinic->package_ids->package ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.clinic.fields.clinic_adminid') }}
+                        </th>
+                        <td>
+                            {{ $clinic->clinic_adminid->name ?? '' }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

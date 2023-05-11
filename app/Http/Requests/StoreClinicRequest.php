@@ -28,6 +28,10 @@ class StoreClinicRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'clinic_adminid_id' => [
+                'required',
+                'integer',
+            ],
         ];
     }
 }

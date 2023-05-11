@@ -28,6 +28,10 @@ class UpdateClinicRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'clinic_adminid_id' => [
+                'required',
+                'integer',
+            ],
         ];
     }
 }

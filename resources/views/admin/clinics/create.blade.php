@@ -44,6 +44,20 @@
                 <span class="help-block">{{ trans('cruds.clinic.fields.package_ids_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="clinic_adminid_id">{{ trans('cruds.clinic.fields.clinic_adminid') }}</label>
+                <select class="form-control select2 {{ $errors->has('clinic_adminid') ? 'is-invalid' : '' }}" name="clinic_adminid_id" id="clinic_adminid_id" required>
+                    @foreach($clinic_adminids as $id => $entry)
+                        <option value="{{ $id }}" {{ old('clinic_adminid_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('clinic_adminid'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('clinic_adminid') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clinic.fields.clinic_adminid_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>
