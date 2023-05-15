@@ -220,6 +220,46 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 53,
+                'title' => 'timing_create',
+            ],
+            [
+                'id'    => 54,
+                'title' => 'timing_edit',
+            ],
+            [
+                'id'    => 55,
+                'title' => 'timing_show',
+            ],
+            [
+                'id'    => 56,
+                'title' => 'timing_delete',
+            ],
+            [
+                'id'    => 57,
+                'title' => 'timing_access',
+            ],
+            [
+                'id'    => 58,
+                'title' => 'closed_timing_create',
+            ],
+            [
+                'id'    => 59,
+                'title' => 'closed_timing_edit',
+            ],
+            [
+                'id'    => 60,
+                'title' => 'closed_timing_show',
+            ],
+            [
+                'id'    => 61,
+                'title' => 'closed_timing_delete',
+            ],
+            [
+                'id'    => 62,
+                'title' => 'closed_timing_access',
+            ],
+            [
+                'id'    => 63,
                 'title' => 'profile_password_edit',
             ],
         ];
