@@ -56,6 +56,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('content-pages/media', 'ContentPageController@storeMedia')->name('content-pages.storeMedia');
     Route::post('content-pages/ckmedia', 'ContentPageController@storeCKEditorImages')->name('content-pages.storeCKEditorImages');
     Route::resource('content-pages', 'ContentPageController');
+
+    // Timing
+    Route::delete('timings/destroy', 'TimingController@massDestroy')->name('timings.massDestroy');
+    Route::resource('timings', 'TimingController');
+
+    // Closed Timing
+    Route::delete('closed-timings/destroy', 'ClosedTimingController@massDestroy')->name('closed-timings.massDestroy');
+    Route::resource('closed-timings', 'ClosedTimingController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
