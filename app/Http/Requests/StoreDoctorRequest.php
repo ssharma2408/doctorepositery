@@ -17,14 +17,6 @@ class StoreDoctorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'string',
-                'required',
-            ],
-            'email' => [
-                'required',
-                'unique:doctors',
-            ],
             'mobile_number' => [
                 'string',
                 'required',

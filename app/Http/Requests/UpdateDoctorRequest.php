@@ -17,14 +17,6 @@ class UpdateDoctorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'string',
-                'required',
-            ],
-            'email' => [
-                'required',
-                'unique:doctors,email,' . request()->route('doctor')->id,
-            ],
             'mobile_number' => [
                 'string',
                 'required',
