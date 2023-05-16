@@ -22,6 +22,7 @@ class Doctor extends Model
     protected $fillable = [
         'mobile_number',
         'clinic_id',
+        'doctor_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -35,5 +36,10 @@ class Doctor extends Model
     public function clinic()
     {
         return $this->belongsTo(Clinic::class, 'clinic_id');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
     }
 }

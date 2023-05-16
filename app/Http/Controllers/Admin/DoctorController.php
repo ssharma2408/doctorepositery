@@ -8,6 +8,7 @@ use App\Http\Requests\StoreDoctorRequest;
 use App\Http\Requests\UpdateDoctorRequest;
 use App\Models\Clinic;
 use App\Models\Doctor;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $doctors = Doctor::with(['clinic'])->get();
+        $doctors = Doctor::with(['clinic', 'doctor'])->get();
 
         return view('admin.doctors.index', compact('doctors'));
     }
@@ -29,7 +30,9 @@ class DoctorController extends Controller
 
         $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.doctors.create', compact('clinics'));
+        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.doctors.create', compact('clinics', 'doctors'));
     }
 
     public function store(StoreDoctorRequest $request)
@@ -45,9 +48,11 @@ class DoctorController extends Controller
 
         $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctor->load('clinic');
+        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.doctors.edit', compact('clinics', 'doctor'));
+        $doctor->load('clinic', 'doctor');
+
+        return view('admin.doctors.edit', compact('clinics', 'doctor', 'doctors'));
     }
 
     public function update(UpdateDoctorRequest $request, Doctor $doctor)
@@ -61,7 +66,7 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $doctor->load('clinic');
+        $doctor->load('clinic', 'doctor');
 
         return view('admin.doctors.show', compact('doctor'));
     }
