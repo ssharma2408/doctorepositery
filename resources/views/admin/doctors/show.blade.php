@@ -39,6 +39,14 @@
                             {{ $doctor->clinic->name ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.doctor.fields.doctor') }}
+                        </th>
+                        <td>
+                            {{ $doctor->doctor->name ?? '' }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">
