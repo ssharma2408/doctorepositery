@@ -20,8 +20,6 @@ class Doctor extends Model
     ];
 
     protected $fillable = [
-        'name',
-        'email',
         'mobile_number',
         'clinic_id',
         'created_at',

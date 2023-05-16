@@ -25,22 +25,6 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.doctor.fields.name') }}
-                        </th>
-                        <td>
-                            {{ $doctor->name }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.doctor.fields.email') }}
-                        </th>
-                        <td>
-                            {{ $doctor->email }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
                             {{ trans('cruds.doctor.fields.mobile_number') }}
                         </th>
                         <td>
