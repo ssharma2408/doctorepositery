@@ -119,6 +119,8 @@ return [
             'mobile_number_helper' => ' ',
             'clinic'               => 'Clinic',
             'clinic_helper'        => ' ',
+            'doctor'               => 'Doctor',
+            'doctor_helper'        => ' ',
         ],
     ],
     'staff' => [

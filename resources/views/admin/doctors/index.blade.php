@@ -32,6 +32,9 @@
                             {{ trans('cruds.doctor.fields.clinic') }}
                         </th>
                         <th>
+                            {{ trans('cruds.doctor.fields.doctor') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -50,6 +53,9 @@
                             </td>
                             <td>
                                 {{ $doctor->clinic->name ?? '' }}
+                            </td>
+                            <td>
+                                {{ $doctor->doctor->name ?? '' }}
                             </td>
                             <td>
                                 @can('doctor_show')

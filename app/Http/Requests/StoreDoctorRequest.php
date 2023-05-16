@@ -22,6 +22,10 @@ class StoreDoctorRequest extends FormRequest
                 'required',
                 'unique:doctors',
             ],
+            'doctor_id' => [
+                'required',
+                'integer',
+            ],
         ];
     }
 }
