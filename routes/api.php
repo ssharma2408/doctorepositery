@@ -11,8 +11,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Doctor
     Route::apiResource('doctors', 'DoctorApiController');
 
-    // Staff
-    Route::apiResource('staffs', 'StaffApiController');
+    // Staff    
+	Route::apiResource('staffs', 'StaffApiController');
 
     // Content Category
     Route::apiResource('content-categories', 'ContentCategoryApiController');
