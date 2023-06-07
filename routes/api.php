@@ -33,3 +33,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Domain
     Route::apiResource('domains', 'DomainApiController');
 });
+
+Route::controller(Api\V1\Admin\RegisterController::class)->group(function(){
+	Route::post('register', 'register');
+    Route::post('login', 'login');
+});	

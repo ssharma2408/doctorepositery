@@ -11,7 +11,8 @@ class StoreStaffRequest extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('staff_create');
+        //return Gate::allows('staff_create');
+		return true;
     }
 
     public function rules()
