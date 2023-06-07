@@ -33,6 +33,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.clinic.fields.prefix') }}
+                        </th>
+                        <td>
+                            {{ $clinic->prefix }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.clinic.fields.address') }}
                         </th>
                         <td>
@@ -49,10 +57,42 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.clinic.fields.package_start_date') }}
+                        </th>
+                        <td>
+                            {{ $clinic->package_start_date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.clinic.fields.package_end_date') }}
+                        </th>
+                        <td>
+                            {{ $clinic->package_end_date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.clinic.fields.clinic_admin') }}
                         </th>
                         <td>
                             {{ $clinic->clinic_admin->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.clinic.fields.domain') }}
+                        </th>
+                        <td>
+                            {{ $clinic->domain->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.clinic.fields.status') }}
+                        </th>
+                        <td>
+                            {{ App\Models\Clinic::STATUS_SELECT[$clinic->status] ?? '' }}
                         </td>
                     </tr>
                 </tbody>

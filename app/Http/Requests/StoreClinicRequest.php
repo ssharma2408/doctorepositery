@@ -21,12 +21,34 @@ class StoreClinicRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'prefix' => [
+                'string',
+                'min:3',
+                'max:4',
+                'required',
+                'unique:clinics',
+            ],
             'address' => [
                 'required',
             ],
             'package_id' => [
                 'required',
                 'integer',
+            ],
+            'package_start_date' => [
+                'date_format:' . config('panel.date_format') . ' ' . config('panel.time_format'),
+                'nullable',
+            ],
+            'package_end_date' => [
+                'date_format:' . config('panel.date_format') . ' ' . config('panel.time_format'),
+                'nullable',
+            ],
+            'domain_id' => [
+                'required',
+                'integer',
+            ],
+            'status' => [
+                'required',
             ],
         ];
     }
