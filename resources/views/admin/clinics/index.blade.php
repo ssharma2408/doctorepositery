@@ -29,10 +29,25 @@
                             {{ trans('cruds.clinic.fields.name') }}
                         </th>
                         <th>
+                            {{ trans('cruds.clinic.fields.prefix') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.clinic.fields.package') }}
                         </th>
                         <th>
+                            {{ trans('cruds.clinic.fields.package_start_date') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.clinic.fields.package_end_date') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.clinic.fields.clinic_admin') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.clinic.fields.domain') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.clinic.fields.status') }}
                         </th>
                         <th>
                             &nbsp;
@@ -52,10 +67,25 @@
                                 {{ $clinic->name ?? '' }}
                             </td>
                             <td>
+                                {{ $clinic->prefix ?? '' }}
+                            </td>
+                            <td>
                                 {{ $clinic->package->package ?? '' }}
                             </td>
                             <td>
+                                {{ $clinic->package_start_date ?? '' }}
+                            </td>
+                            <td>
+                                {{ $clinic->package_end_date ?? '' }}
+                            </td>
+                            <td>
                                 {{ $clinic->clinic_admin->name ?? '' }}
+                            </td>
+                            <td>
+                                {{ $clinic->domain->name ?? '' }}
+                            </td>
+                            <td>
+                                {{ App\Models\Clinic::STATUS_SELECT[$clinic->status] ?? '' }}
                             </td>
                             <td>
                                 @can('clinic_show')

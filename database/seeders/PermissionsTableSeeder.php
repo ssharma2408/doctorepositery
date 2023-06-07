@@ -260,6 +260,26 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 63,
+                'title' => 'domain_create',
+            ],
+            [
+                'id'    => 64,
+                'title' => 'domain_edit',
+            ],
+            [
+                'id'    => 65,
+                'title' => 'domain_show',
+            ],
+            [
+                'id'    => 66,
+                'title' => 'domain_delete',
+            ],
+            [
+                'id'    => 67,
+                'title' => 'domain_access',
+            ],
+            [
+                'id'    => 68,
                 'title' => 'profile_password_edit',
             ],
         ];

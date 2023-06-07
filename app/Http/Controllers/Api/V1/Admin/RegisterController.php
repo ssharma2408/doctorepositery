@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\V1\Admin\BaseController as BaseController;
 use App\Models\User;
+use App\Models\Clinic;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\JsonResponse;
@@ -45,12 +46,17 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+
+            $user = Auth::user();
+
+			$clinic = Clinic::where('clinic_admin_id', $user->id)->first();
+
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
             $success['name'] =  $user->name;
             $success['role'] =  $user->roles->toArray()[0]['title'];
-   
+            $success['clinic_id'] =  $clinic->id;
+
             return $this->sendResponse($success, 'User login successfully.');
         } 
         else{ 

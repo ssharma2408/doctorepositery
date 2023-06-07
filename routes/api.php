@@ -29,9 +29,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Closed Timing
     Route::apiResource('closed-timings', 'ClosedTimingApiController');
-});
 
-Route::controller(Api\V1\Admin\RegisterController::class)->group(function(){    
-	Route::post('register', 'register');
-    Route::post('login', 'login');
+    // Domain
+    Route::apiResource('domains', 'DomainApiController');
 });

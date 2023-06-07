@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,15 @@ class Clinic extends Model implements HasMedia
 
     public $table = 'clinics';
 
+    public const STATUS_SELECT = [
+        '0' => 'Disabled',
+        '1' => 'Enabled',
+        '2' => 'Expired',
+    ];
+
     protected $dates = [
+        'package_start_date',
+        'package_end_date',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -24,9 +33,14 @@ class Clinic extends Model implements HasMedia
 
     protected $fillable = [
         'name',
+        'prefix',
         'address',
         'package_id',
+        'package_start_date',
+        'package_end_date',
         'clinic_admin_id',
+        'domain_id',
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -48,8 +62,33 @@ class Clinic extends Model implements HasMedia
         return $this->belongsTo(Package::class, 'package_id');
     }
 
+    public function getPackageStartDateAttribute($value)
+    {
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+    }
+
+    public function setPackageStartDateAttribute($value)
+    {
+        $this->attributes['package_start_date'] = $value ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $value)->format('Y-m-d H:i:s') : null;
+    }
+
+    public function getPackageEndDateAttribute($value)
+    {
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+    }
+
+    public function setPackageEndDateAttribute($value)
+    {
+        $this->attributes['package_end_date'] = $value ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $value)->format('Y-m-d H:i:s') : null;
+    }
+
     public function clinic_admin()
     {
         return $this->belongsTo(User::class, 'clinic_admin_id');
+    }
+
+    public function domain()
+    {
+        return $this->belongsTo(Domain::class, 'domain_id');
     }
 }
