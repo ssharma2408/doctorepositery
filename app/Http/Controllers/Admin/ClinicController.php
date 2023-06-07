@@ -8,6 +8,7 @@ use App\Http\Requests\MassDestroyClinicRequest;
 use App\Http\Requests\StoreClinicRequest;
 use App\Http\Requests\UpdateClinicRequest;
 use App\Models\Clinic;
+use App\Models\Domain;
 use App\Models\Package;
 use App\Models\User;
 use Gate;
@@ -23,7 +24,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinics = Clinic::with(['package', 'clinic_admin'])->get();
+        $clinics = Clinic::with(['package', 'clinic_admin', 'domain'])->get();
 
         return view('admin.clinics.index', compact('clinics'));
     }
@@ -36,7 +37,9 @@ class ClinicController extends Controller
 
         $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clinics.create', compact('clinic_admins', 'packages'));
+        $domains = Domain::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.clinics.create', compact('clinic_admins', 'domains', 'packages'));
     }
 
     public function store(StoreClinicRequest $request)
@@ -58,9 +61,11 @@ class ClinicController extends Controller
 
         $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic->load('package', 'clinic_admin');
+        $domains = Domain::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clinics.edit', compact('clinic', 'clinic_admins', 'packages'));
+        $clinic->load('package', 'clinic_admin', 'domain');
+
+        return view('admin.clinics.edit', compact('clinic', 'clinic_admins', 'domains', 'packages'));
     }
 
     public function update(UpdateClinicRequest $request, Clinic $clinic)
@@ -74,7 +79,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic->load('package', 'clinic_admin');
+        $clinic->load('package', 'clinic_admin', 'domain');
 
         return view('admin.clinics.show', compact('clinic'));
     }

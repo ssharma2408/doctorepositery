@@ -20,6 +20,16 @@
                 <span class="help-block">{{ trans('cruds.clinic.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="prefix">{{ trans('cruds.clinic.fields.prefix') }}</label>
+                <input class="form-control {{ $errors->has('prefix') ? 'is-invalid' : '' }}" type="text" name="prefix" id="prefix" value="{{ old('prefix', '') }}" required>
+                @if($errors->has('prefix'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('prefix') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clinic.fields.prefix_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="address">{{ trans('cruds.clinic.fields.address') }}</label>
                 <textarea class="form-control ckeditor {{ $errors->has('address') ? 'is-invalid' : '' }}" name="address" id="address">{!! old('address') !!}</textarea>
                 @if($errors->has('address'))
@@ -44,6 +54,26 @@
                 <span class="help-block">{{ trans('cruds.clinic.fields.package_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="package_start_date">{{ trans('cruds.clinic.fields.package_start_date') }}</label>
+                <input class="form-control datetime {{ $errors->has('package_start_date') ? 'is-invalid' : '' }}" type="text" name="package_start_date" id="package_start_date" value="{{ old('package_start_date') }}">
+                @if($errors->has('package_start_date'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('package_start_date') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clinic.fields.package_start_date_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="package_end_date">{{ trans('cruds.clinic.fields.package_end_date') }}</label>
+                <input class="form-control datetime {{ $errors->has('package_end_date') ? 'is-invalid' : '' }}" type="text" name="package_end_date" id="package_end_date" value="{{ old('package_end_date') }}">
+                @if($errors->has('package_end_date'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('package_end_date') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clinic.fields.package_end_date_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="clinic_admin_id">{{ trans('cruds.clinic.fields.clinic_admin') }}</label>
                 <select class="form-control select2 {{ $errors->has('clinic_admin') ? 'is-invalid' : '' }}" name="clinic_admin_id" id="clinic_admin_id">
                     @foreach($clinic_admins as $id => $entry)
@@ -56,6 +86,35 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.clinic.fields.clinic_admin_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="domain_id">{{ trans('cruds.clinic.fields.domain') }}</label>
+                <select class="form-control select2 {{ $errors->has('domain') ? 'is-invalid' : '' }}" name="domain_id" id="domain_id" required>
+                    @foreach($domains as $id => $entry)
+                        <option value="{{ $id }}" {{ old('domain_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('domain'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('domain') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clinic.fields.domain_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required">{{ trans('cruds.clinic.fields.status') }}</label>
+                <select class="form-control {{ $errors->has('status') ? 'is-invalid' : '' }}" name="status" id="status" required>
+                    <option value disabled {{ old('status', null) === null ? 'selected' : '' }}>{{ trans('global.pleaseSelect') }}</option>
+                    @foreach(App\Models\Clinic::STATUS_SELECT as $key => $label)
+                        <option value="{{ $key }}" {{ old('status', '') === (string) $key ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('status'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('status') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clinic.fields.status_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

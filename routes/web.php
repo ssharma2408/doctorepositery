@@ -64,6 +64,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Closed Timing
     Route::delete('closed-timings/destroy', 'ClosedTimingController@massDestroy')->name('closed-timings.massDestroy');
     Route::resource('closed-timings', 'ClosedTimingController');
+
+    // Domain
+    Route::delete('domains/destroy', 'DomainController@massDestroy')->name('domains.massDestroy');
+    Route::resource('domains', 'DomainController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
