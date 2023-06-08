@@ -6,10 +6,11 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Sanctum\HasApiTokens;
 
 class Staff extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasApiTokens, SoftDeletes, HasFactory;
 
     public $table = 'staffs';
 
