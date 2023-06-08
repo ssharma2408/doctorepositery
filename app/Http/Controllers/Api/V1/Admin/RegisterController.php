@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Clinic;
 use App\Models\Domain;
 use App\Models\Staff;
+use App\Models\Doctor;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\JsonResponse;
@@ -70,7 +71,9 @@ class RegisterController extends BaseController
 				if($user_role == "Clinic Admin"){
 					$clinic = Clinic::where('clinic_admin_id', $user->id)->first();
 				}else{
-					$clinic = Clinic::where('id', $request->clinic_id)->first();
+					
+					$doctor = Doctor::where('doctor_id', $user->id)->first();					
+					$clinic = Clinic::where('id', $doctor->clinic_id)->first();				
 				}			
 				
 				if( ! $clinic['status']){
@@ -81,14 +84,18 @@ class RegisterController extends BaseController
 				
 				if($domain->name != $request->domain){
 					return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this doamin']);
+				}				
+				
+				if($clinic->id == $request->clinic_id){
+					$success['token'] =  $user->createToken('MyApp')->plainTextToken; 
+					$success['name'] =  $user->name;
+					$success['role'] =  $user_role;
+					$success['postfix'] =  $clinic->prefix;
+
+					return $this->sendResponse($success, 'User login successfully.');
+				}else{
+					return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this doamin']);
 				}
-
-				$success['token'] =  $user->createToken('MyApp')->plainTextToken; 
-				$success['name'] =  $user->name;
-				$success['role'] =  $user_role;
-				$success['postfix'] =  $clinic->prefix;
-
-				return $this->sendResponse($success, 'User login successfully.');
 			} 
 			else{
 				return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
