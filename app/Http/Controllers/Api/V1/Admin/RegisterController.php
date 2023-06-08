@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\JsonResponse;
 
+use Hash;
+
 class RegisterController extends BaseController
 {
     /**
@@ -92,11 +94,9 @@ class RegisterController extends BaseController
 				return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
 			} 
 		}else{
-			$staff = Staff::where([
-				['username', '=', $request->email],
-				['password', '=', $request->password]				
-			])->first();
-			if(!empty($staff)){
+			$staff = Staff::where('username', $request->email)->first();
+			
+			if(!empty($staff) && Hash::check($request->password, $staff->password)){
 				
 				if($staff->clinic_id == $request->clinic_id){
 					 
