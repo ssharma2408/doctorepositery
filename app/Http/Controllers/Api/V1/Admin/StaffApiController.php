@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StaffApiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         //abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new StaffResource(Staff::with(['clinic'])->get());
+        return new StaffResource(Staff::where('clinic_id', $request->clinic_id)->with(['clinic'])->get());
     }
 
     public function store(StoreStaffRequest $request)
