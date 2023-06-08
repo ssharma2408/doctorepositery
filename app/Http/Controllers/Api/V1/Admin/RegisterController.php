@@ -82,16 +82,13 @@ class RegisterController extends BaseController
 				if($domain->name != $request->domain){
 					return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this doamin']);
 				}
-				if($clinic->clinic_id == $request->clinic_id){
-					$success['token'] =  $user->createToken('MyApp')->plainTextToken; 
-					$success['name'] =  $user->name;
-					$success['role'] =  $user_role;
-					$success['postfix'] =  $clinic->prefix;
 
-					return $this->sendResponse($success, 'User login successfully.');
-				}else{
-					return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this doamin']);
-				}
+				$success['token'] =  $user->createToken('MyApp')->plainTextToken; 
+				$success['name'] =  $user->name;
+				$success['role'] =  $user_role;
+				$success['postfix'] =  $clinic->prefix;
+
+				return $this->sendResponse($success, 'User login successfully.');
 			} 
 			else{
 				return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
