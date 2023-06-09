@@ -9,6 +9,8 @@ use App\Models\Clinic;
 use App\Models\Domain;
 use App\Models\Staff;
 use App\Models\Doctor;
+use App\Models\Patient;
+use App\Models\PatientOtp;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\JsonResponse;
@@ -23,25 +25,24 @@ class RegisterController extends BaseController
      * @return \Illuminate\Http\Response
      */
     public function register(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
+    {        
+		$validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
+            'mobile_number' => 'required'            
         ]);
-   
+		
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
    
         $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->plainTextToken;
-        $success['name'] =  $user->name;
+		
+        //$input['password'] = bcrypt($input['password']);
+        $patient = Patient::create($input);
+        $success['token'] =  $patient->createToken('MyApp')->plainTextToken;
+        $success['name'] =  $patient->name;
    
-        return $this->sendResponse($success, 'User register successfully.');
+        return $this->sendResponse($success, 'Patient register successfully.');
     }
    
     /**
@@ -120,5 +121,101 @@ class RegisterController extends BaseController
 			}
 		}	
 		
+    }
+	
+	/**
+     * Patient Login api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function generate(Request $request): JsonResponse
+    {
+		if( ! isset($request->clinic_id)){
+			return $this->sendError('Configuartion Error', ['error'=>'Please pass Clinic ID']);
+		}
+		
+		if( ! isset($request->domain)){
+			return $this->sendError('Configuartion Error', ['error'=>'Please pass domain']);
+		}
+		
+		$request->validate([
+            'mobile_number' => 'required|exists:patients,mobile_number'
+        ]);
+		
+        /* Generate An OTP */
+        $patientOtp = $this->generateOtp($request->mobile_number);
+        $patientOtp->sendSMS($request->mobile_number);  
+        
+		return $this->sendResponse(['patient_id' => $patientOtp->patient_id], 'OTP has been sent on Your Mobile Number.');
+		
+	}
+	
+	 /**
+     * Write code on Method
+     *
+     * @return response()
+     */
+    public function generateOtp($mobile_no)
+    {
+        $patient = Patient::where('mobile_number', $mobile_no)->first();
+		
+		if($patient->clinic_id != $request->clinic_id){
+			return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this clinic']);
+		}
+  
+        /* patient Does not Have Any Existing OTP */
+        $patientOtp = PatientOtp::where('patient_id', $patient->id)->latest()->first();
+  
+        $now = now();
+  
+        if($patientOtp && $now->isBefore($patientOtp->expire_at)){
+            return $patientOtp;
+        }
+  
+        /* Create a New OTP */
+        return PatientOtp::create([
+            'patient_id' => $patient->id,
+            'otp' => rand(123456, 999999),
+            'expire_at' => $now->addMinutes(10)
+        ]);
+    }
+	
+	/**
+     * Write code on Method
+     *
+     * @return response()
+     */
+    public function loginWithOtp(Request $request)
+    {
+        /* Validation */
+        $request->validate([
+            'patient_id' => 'required|exists:patients,id',
+            'otp' => 'required'
+        ]);  
+  
+        /* Validation Logic */
+        $patientOtp   = PatientOtp::where('patient_id', $request->patient_id)->where('otp', $request->otp)->first();
+  
+        $now = now();
+        if (!$patientOtp) {
+            
+			return $this->sendError('error', ['error'=>'Your OTP is not correct']);
+        }else if($patientOtp && $now->isAfter($patientOtp->expire_at)){            
+			return $this->sendError('error', ['error'=>'Your OTP has been expired']);
+        }
+    
+        $patient = Patient::whereId($request->patient_id)->first();
+  
+        if($patient){
+              
+            $patientOtp->update([
+                'expire_at' => now()
+            ]);
+			$patient->role = "Patient";
+            //Auth::login($patient);
+  
+            return $this->sendResponse($patient, 'Patient Logged in successfully.');
+        }
+		return $this->sendError('error', ['error'=>'Your Otp is not correct']);
     }
 }
