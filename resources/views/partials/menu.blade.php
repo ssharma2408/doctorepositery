@@ -169,6 +169,36 @@
                 </a>
             </li>
         @endcan
+        @can('patient_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.patients.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/patients") || request()->is("admin/patients/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.patient.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('patient_history_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.patient-histories.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/patient-histories") || request()->is("admin/patient-histories/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.patientHistory.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('token_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.tokens.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/tokens") || request()->is("admin/tokens/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.token.title') }}
+                </a>
+            </li>
+        @endcan
         @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
             @can('profile_password_edit')
                 <li class="c-sidebar-nav-item">

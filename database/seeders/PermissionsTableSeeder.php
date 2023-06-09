@@ -280,6 +280,66 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 68,
+                'title' => 'patient_create',
+            ],
+            [
+                'id'    => 69,
+                'title' => 'patient_edit',
+            ],
+            [
+                'id'    => 70,
+                'title' => 'patient_show',
+            ],
+            [
+                'id'    => 71,
+                'title' => 'patient_delete',
+            ],
+            [
+                'id'    => 72,
+                'title' => 'patient_access',
+            ],
+            [
+                'id'    => 73,
+                'title' => 'patient_history_create',
+            ],
+            [
+                'id'    => 74,
+                'title' => 'patient_history_edit',
+            ],
+            [
+                'id'    => 75,
+                'title' => 'patient_history_show',
+            ],
+            [
+                'id'    => 76,
+                'title' => 'patient_history_delete',
+            ],
+            [
+                'id'    => 77,
+                'title' => 'patient_history_access',
+            ],
+            [
+                'id'    => 78,
+                'title' => 'token_create',
+            ],
+            [
+                'id'    => 79,
+                'title' => 'token_edit',
+            ],
+            [
+                'id'    => 80,
+                'title' => 'token_show',
+            ],
+            [
+                'id'    => 81,
+                'title' => 'token_delete',
+            ],
+            [
+                'id'    => 82,
+                'title' => 'token_access',
+            ],
+            [
+                'id'    => 83,
                 'title' => 'profile_password_edit',
             ],
         ];
