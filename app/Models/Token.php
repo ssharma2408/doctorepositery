@@ -7,15 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Staff extends Model
+class Token extends Model
 {
     use SoftDeletes, HasFactory;
 
-    public $table = 'staffs';
-
-    protected $hidden = [
-        'password',
-    ];
+    public $table = 'tokens';
 
     protected $dates = [
         'created_at',
@@ -24,12 +20,10 @@ class Staff extends Model
     ];
 
     protected $fillable = [
-        'name',
-        'email',
-        'mobile_number',
-        'username',
-        'password',
+        'token_number',
         'clinic_id',
+        'patient_id',
+        'doctor_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -43,5 +37,15 @@ class Staff extends Model
     public function clinic()
     {
         return $this->belongsTo(Clinic::class, 'clinic_id');
+    }
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'doctor_id');
     }
 }

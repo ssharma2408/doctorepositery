@@ -7,15 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Staff extends Model
+class Patient extends Model
 {
     use SoftDeletes, HasFactory;
 
-    public $table = 'staffs';
-
-    protected $hidden = [
-        'password',
-    ];
+    public $table = 'patients';
 
     protected $dates = [
         'created_at',
@@ -25,10 +21,7 @@ class Staff extends Model
 
     protected $fillable = [
         'name',
-        'email',
         'mobile_number',
-        'username',
-        'password',
         'clinic_id',
         'created_at',
         'updated_at',
