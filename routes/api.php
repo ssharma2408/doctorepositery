@@ -32,9 +32,14 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Domain
     Route::apiResource('domains', 'DomainApiController');
-});
 
-Route::controller(Api\V1\Admin\RegisterController::class)->group(function(){
-	Route::post('register', 'register');
-    Route::post('login', 'login');
-});	
+    // Patient
+    Route::apiResource('patients', 'PatientApiController');
+
+    // Patient History
+    Route::post('patient-histories/media', 'PatientHistoryApiController@storeMedia')->name('patient-histories.storeMedia');
+    Route::apiResource('patient-histories', 'PatientHistoryApiController');
+
+    // Token
+    Route::apiResource('tokens', 'TokenApiController');
+});

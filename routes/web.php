@@ -68,6 +68,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Domain
     Route::delete('domains/destroy', 'DomainController@massDestroy')->name('domains.massDestroy');
     Route::resource('domains', 'DomainController');
+
+    // Patient
+    Route::delete('patients/destroy', 'PatientController@massDestroy')->name('patients.massDestroy');
+    Route::resource('patients', 'PatientController');
+
+    // Patient History
+    Route::delete('patient-histories/destroy', 'PatientHistoryController@massDestroy')->name('patient-histories.massDestroy');
+    Route::post('patient-histories/media', 'PatientHistoryController@storeMedia')->name('patient-histories.storeMedia');
+    Route::post('patient-histories/ckmedia', 'PatientHistoryController@storeCKEditorImages')->name('patient-histories.storeCKEditorImages');
+    Route::resource('patient-histories', 'PatientHistoryController');
+
+    // Token
+    Route::delete('tokens/destroy', 'TokenController@massDestroy')->name('tokens.massDestroy');
+    Route::resource('tokens', 'TokenController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
