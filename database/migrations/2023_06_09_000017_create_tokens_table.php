@@ -11,6 +11,7 @@ class CreateTokensTable extends Migration
         Schema::create('tokens', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('token_number');
+            $table->string('estimated_time');
             $table->timestamps();
             $table->softDeletes();
         });

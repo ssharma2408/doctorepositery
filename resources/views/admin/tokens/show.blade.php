@@ -55,6 +55,14 @@
                             {{ $token->doctor->mobile_number ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.token.fields.estimated_time') }}
+                        </th>
+                        <td>
+                            {{ $token->estimated_time }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

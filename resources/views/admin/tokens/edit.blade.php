@@ -63,6 +63,16 @@
                 <span class="help-block">{{ trans('cruds.token.fields.doctor_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="estimated_time">{{ trans('cruds.token.fields.estimated_time') }}</label>
+                <input class="form-control {{ $errors->has('estimated_time') ? 'is-invalid' : '' }}" type="text" name="estimated_time" id="estimated_time" value="{{ old('estimated_time', $token->estimated_time) }}" required>
+                @if($errors->has('estimated_time'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('estimated_time') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.token.fields.estimated_time_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>
