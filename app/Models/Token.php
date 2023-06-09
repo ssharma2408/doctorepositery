@@ -24,6 +24,7 @@ class Token extends Model
         'clinic_id',
         'patient_id',
         'doctor_id',
+        'estimated_time',
         'created_at',
         'updated_at',
         'deleted_at',

@@ -35,6 +35,10 @@ class UpdateTokenRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'estimated_time' => [
+                'string',
+                'required',
+            ],
         ];
     }
 }

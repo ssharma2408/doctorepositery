@@ -38,6 +38,9 @@
                             {{ trans('cruds.token.fields.doctor') }}
                         </th>
                         <th>
+                            {{ trans('cruds.token.fields.estimated_time') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -62,6 +65,9 @@
                             </td>
                             <td>
                                 {{ $token->doctor->mobile_number ?? '' }}
+                            </td>
+                            <td>
+                                {{ $token->estimated_time ?? '' }}
                             </td>
                             <td>
                                 @can('token_show')
