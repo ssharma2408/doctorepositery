@@ -143,7 +143,7 @@ class RegisterController extends BaseController
         ]);
 		
         /* Generate An OTP */
-        $patientOtp = $this->generateOtp($request->mobile_number);
+        $patientOtp = $this->generateOtp($request->clinic_id, $request->mobile_number);
         $patientOtp->sendSMS($request->mobile_number);  
         
 		return $this->sendResponse(['patient_id' => $patientOtp->patient_id], 'OTP has been sent on Your Mobile Number.');
@@ -155,11 +155,11 @@ class RegisterController extends BaseController
      *
      * @return response()
      */
-    public function generateOtp($mobile_no)
+    public function generateOtp($clinic_id, $mobile_no)
     {
         $patient = Patient::where('mobile_number', $mobile_no)->first();
 		
-		if($patient->clinic_id != $request->clinic_id){
+		if($patient->clinic_id != $clinic_id){
 			return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this clinic']);
 		}
   
