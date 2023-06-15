@@ -35,7 +35,11 @@ class ClinicController extends Controller
 
         $packages = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinic_admins = User::whereHas(
+								'roles', function($q){
+									$q->where('title', 'Clinic Admin');
+								}
+							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $domains = Domain::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
@@ -59,7 +63,11 @@ class ClinicController extends Controller
 
         $packages = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinic_admins = User::whereHas(
+								'roles', function($q){
+									$q->where('title', 'Clinic Admin');
+								}
+							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $domains = Domain::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
