@@ -9,8 +9,6 @@ class AddRelationshipFieldsToDoctorsTable extends Migration
     public function up()
     {
         Schema::table('doctors', function (Blueprint $table) {
-            $table->unsignedBigInteger('clinic_id')->nullable();
-            $table->foreign('clinic_id', 'clinic_fk_8467033')->references('id')->on('clinics');
             $table->unsignedBigInteger('doctor_id')->nullable();
             $table->foreign('doctor_id', 'doctor_fk_8486999')->references('id')->on('users');
         });

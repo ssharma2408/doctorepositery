@@ -47,6 +47,9 @@
                             {{ trans('cruds.clinic.fields.domain') }}
                         </th>
                         <th>
+                            {{ trans('cruds.clinic.fields.doctor') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.clinic.fields.status') }}
                         </th>
                         <th>
@@ -83,6 +86,11 @@
                             </td>
                             <td>
                                 {{ $clinic->domain->name ?? '' }}
+                            </td>
+                            <td>
+                                @foreach($clinic->doctors as $key => $item)
+                                    <span class="badge badge-info">{{ $item->mobile_number }}</span>
+                                @endforeach
                             </td>
                             <td>
                                 {{ App\Models\Clinic::STATUS_SELECT[$clinic->status] ?? '' }}

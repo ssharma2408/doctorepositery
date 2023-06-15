@@ -47,6 +47,13 @@ class UpdateClinicRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'doctors.*' => [
+                'integer',
+            ],
+            'doctors' => [
+                'required',
+                'array',
+            ],
             'status' => [
                 'required',
             ],

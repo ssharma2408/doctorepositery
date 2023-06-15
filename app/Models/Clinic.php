@@ -91,4 +91,9 @@ class Clinic extends Model implements HasMedia
     {
         return $this->belongsTo(Domain::class, 'domain_id');
     }
+
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class);
+    }
 }

@@ -26,6 +26,12 @@ class UpdateDoctorRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'clinics.*' => [
+                'integer',
+            ],
+            'clinics' => [
+                'array',
+            ],
         ];
     }
 }
