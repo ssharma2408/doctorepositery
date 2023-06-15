@@ -30,8 +30,8 @@
                 <span class="help-block">{{ trans('cruds.clinic.fields.prefix_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="address">{{ trans('cruds.clinic.fields.address') }}</label>
-                <textarea class="form-control ckeditor {{ $errors->has('address') ? 'is-invalid' : '' }}" name="address" id="address" required>{!! old('address') !!}</textarea>
+                <label for="address">{{ trans('cruds.clinic.fields.address') }}</label>
+                <textarea class="form-control ckeditor {{ $errors->has('address') ? 'is-invalid' : '' }}" name="address" id="address">{!! old('address') !!}</textarea>
                 @if($errors->has('address'))
                     <div class="invalid-feedback">
                         {{ $errors->first('address') }}
@@ -100,6 +100,24 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.clinic.fields.domain_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="doctors">{{ trans('cruds.clinic.fields.doctor') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('doctors') ? 'is-invalid' : '' }}" name="doctors[]" id="doctors" multiple required>
+                    @foreach($doctors as $id => $doctor)
+                        <option value="{{ $id }}" {{ in_array($id, old('doctors', [])) ? 'selected' : '' }}>{{ $doctor }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('doctors'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('doctors') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clinic.fields.doctor_helper') }}</span>
             </div>
             <div class="form-group">
                 <label class="required">{{ trans('cruds.clinic.fields.status') }}</label>

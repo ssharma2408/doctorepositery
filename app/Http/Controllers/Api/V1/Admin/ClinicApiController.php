@@ -18,14 +18,15 @@ class ClinicApiController extends Controller
 
     public function index()
     {
-        //abort_if(Gate::denies('clinic_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('clinic_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new ClinicResource(Clinic::with(['package', 'clinic_admin', 'domain'])->get());
+        return new ClinicResource(Clinic::with(['package', 'clinic_admin', 'domain', 'doctors'])->get());
     }
 
     public function store(StoreClinicRequest $request)
     {
         $clinic = Clinic::create($request->all());
+        $clinic->doctors()->sync($request->input('doctors', []));
 
         return (new ClinicResource($clinic))
             ->response()
@@ -36,12 +37,13 @@ class ClinicApiController extends Controller
     {
         abort_if(Gate::denies('clinic_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new ClinicResource($clinic->load(['package', 'clinic_admin', 'domain']));
+        return new ClinicResource($clinic->load(['package', 'clinic_admin', 'domain', 'doctors']));
     }
 
     public function update(UpdateClinicRequest $request, Clinic $clinic)
     {
         $clinic->update($request->all());
+        $clinic->doctors()->sync($request->input('doctors', []));
 
         return (new ClinicResource($clinic))
             ->response()

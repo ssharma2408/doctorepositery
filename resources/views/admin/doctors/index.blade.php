@@ -29,10 +29,10 @@
                             {{ trans('cruds.doctor.fields.mobile_number') }}
                         </th>
                         <th>
-                            {{ trans('cruds.doctor.fields.clinic') }}
+                            {{ trans('cruds.doctor.fields.doctor') }}
                         </th>
                         <th>
-                            {{ trans('cruds.doctor.fields.doctor') }}
+                            {{ trans('cruds.doctor.fields.clinic') }}
                         </th>
                         <th>
                             &nbsp;
@@ -52,10 +52,12 @@
                                 {{ $doctor->mobile_number ?? '' }}
                             </td>
                             <td>
-                                {{ $doctor->clinic->name ?? '' }}
+                                {{ $doctor->doctor->name ?? '' }}
                             </td>
                             <td>
-                                {{ $doctor->doctor->name ?? '' }}
+                                @foreach($doctor->clinics as $key => $item)
+                                    <span class="badge badge-info">{{ $item->name }}</span>
+                                @endforeach
                             </td>
                             <td>
                                 @can('doctor_show')

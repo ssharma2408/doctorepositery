@@ -89,6 +89,16 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.clinic.fields.doctor') }}
+                        </th>
+                        <td>
+                            @foreach($clinic->doctors as $key => $doctor)
+                                <span class="label label-info">{{ $doctor->mobile_number }}</span>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.clinic.fields.status') }}
                         </th>
                         <td>

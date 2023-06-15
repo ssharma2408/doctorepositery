@@ -8,6 +8,7 @@ use App\Http\Requests\MassDestroyClinicRequest;
 use App\Http\Requests\StoreClinicRequest;
 use App\Http\Requests\UpdateClinicRequest;
 use App\Models\Clinic;
+use App\Models\Doctor;
 use App\Models\Domain;
 use App\Models\Package;
 use App\Models\User;
@@ -24,7 +25,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinics = Clinic::with(['package', 'clinic_admin', 'domain'])->get();
+        $clinics = Clinic::with(['package', 'clinic_admin', 'domain', 'doctors'])->get();
 
         return view('admin.clinics.index', compact('clinics'));
     }
@@ -35,21 +36,19 @@ class ClinicController extends Controller
 
         $packages = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic_admins = User::whereHas(
-								'roles', function($q){
-									$q->where('title', 'Clinic Admin');
-								}
-							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $domains = Domain::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clinics.create', compact('clinic_admins', 'domains', 'packages'));
+        $doctors = Doctor::pluck('mobile_number', 'id');
+
+        return view('admin.clinics.create', compact('clinic_admins', 'doctors', 'domains', 'packages'));
     }
 
     public function store(StoreClinicRequest $request)
     {
         $clinic = Clinic::create($request->all());
-
+        $clinic->doctors()->sync($request->input('doctors', []));
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $clinic->id]);
         }
@@ -63,22 +62,21 @@ class ClinicController extends Controller
 
         $packages = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic_admins = User::whereHas(
-								'roles', function($q){
-									$q->where('title', 'Clinic Admin');
-								}
-							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $domains = Domain::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic->load('package', 'clinic_admin', 'domain');
+        $doctors = Doctor::pluck('mobile_number', 'id');
 
-        return view('admin.clinics.edit', compact('clinic', 'clinic_admins', 'domains', 'packages'));
+        $clinic->load('package', 'clinic_admin', 'domain', 'doctors');
+
+        return view('admin.clinics.edit', compact('clinic', 'clinic_admins', 'doctors', 'domains', 'packages'));
     }
 
     public function update(UpdateClinicRequest $request, Clinic $clinic)
     {
         $clinic->update($request->all());
+        $clinic->doctors()->sync($request->input('doctors', []));
 
         return redirect()->route('admin.clinics.index');
     }
@@ -87,7 +85,7 @@ class ClinicController extends Controller
     {
         abort_if(Gate::denies('clinic_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinic->load('package', 'clinic_admin', 'domain');
+        $clinic->load('package', 'clinic_admin', 'domain', 'doctors');
 
         return view('admin.clinics.show', compact('clinic'));
     }

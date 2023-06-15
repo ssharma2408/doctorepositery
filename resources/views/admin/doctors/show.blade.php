@@ -33,18 +33,20 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.doctor.fields.clinic') }}
-                        </th>
-                        <td>
-                            {{ $doctor->clinic->name ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
                             {{ trans('cruds.doctor.fields.doctor') }}
                         </th>
                         <td>
                             {{ $doctor->doctor->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.doctor.fields.clinic') }}
+                        </th>
+                        <td>
+                            @foreach($doctor->clinics as $key => $clinic)
+                                <span class="label label-info">{{ $clinic->name }}</span>
+                            @endforeach
                         </td>
                     </tr>
                 </tbody>

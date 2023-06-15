@@ -11,8 +11,7 @@ class UpdateStaffRequest extends FormRequest
 {
     public function authorize()
     {
-        //return Gate::allows('staff_edit');
-		return true;
+        return Gate::allows('staff_edit');
     }
 
     public function rules()
