@@ -30,7 +30,11 @@ class DoctorController extends Controller
 
         $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $doctors = User::whereHas(
+								'roles', function($q){
+									$q->where('title', 'Doctor');
+								}
+							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         return view('admin.doctors.create', compact('clinics', 'doctors'));
     }
@@ -48,7 +52,11 @@ class DoctorController extends Controller
 
         $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $doctors = User::whereHas(
+								'roles', function($q){
+									$q->where('title', 'Doctor');
+								}
+							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $doctor->load('clinic', 'doctor');
 

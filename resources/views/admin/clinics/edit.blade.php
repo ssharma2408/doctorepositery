@@ -31,8 +31,8 @@
                 <span class="help-block">{{ trans('cruds.clinic.fields.prefix_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="address">{{ trans('cruds.clinic.fields.address') }}</label>
-                <textarea class="form-control ckeditor {{ $errors->has('address') ? 'is-invalid' : '' }}" name="address" id="address">{!! old('address', $clinic->address) !!}</textarea>
+                <label class="required" for="address">{{ trans('cruds.clinic.fields.address') }}</label>
+                <textarea class="form-control ckeditor {{ $errors->has('address') ? 'is-invalid' : '' }}" name="address" id="address" required>{!! old('address', $clinic->address) !!}</textarea>
                 @if($errors->has('address'))
                     <div class="invalid-feedback">
                         {{ $errors->first('address') }}
