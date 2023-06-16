@@ -10,10 +10,7 @@ class CreateClosedTimingsTable extends Migration
     {
         Schema::create('closed_timings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('full_partial');
             $table->date('closed_on')->nullable();
-            $table->time('from')->nullable();
-            $table->time('to')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

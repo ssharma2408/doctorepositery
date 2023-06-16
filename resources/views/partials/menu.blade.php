@@ -67,6 +67,16 @@
                 </a>
             </li>
         @endcan
+        @can('domain_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.domains.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/domains") || request()->is("admin/domains/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.domain.title') }}
+                </a>
+            </li>
+        @endcan
         @can('clinic_access')
             <li class="c-sidebar-nav-item">
                 <a href="{{ route("admin.clinics.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/clinics") || request()->is("admin/clinics/*") ? "c-active" : "" }}">
@@ -77,13 +87,33 @@
                 </a>
             </li>
         @endcan
-        @can('doctor_access')
+        @can('timing_access')
             <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.doctors.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/doctors") || request()->is("admin/doctors/*") ? "c-active" : "" }}">
+                <a href="{{ route("admin.timings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/timings") || request()->is("admin/timings/*") ? "c-active" : "" }}">
                     <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
 
                     </i>
-                    {{ trans('cruds.doctor.title') }}
+                    {{ trans('cruds.timing.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('opening_hour_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.opening-hours.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/opening-hours") || request()->is("admin/opening-hours/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.openingHour.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('closed_timing_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.closed-timings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/closed-timings") || request()->is("admin/closed-timings/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.closedTiming.title') }}
                 </a>
             </li>
         @endcan
@@ -137,36 +167,6 @@
                         </li>
                     @endcan
                 </ul>
-            </li>
-        @endcan
-        @can('timing_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.timings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/timings") || request()->is("admin/timings/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.timing.title') }}
-                </a>
-            </li>
-        @endcan
-        @can('closed_timing_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.closed-timings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/closed-timings") || request()->is("admin/closed-timings/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.closedTiming.title') }}
-                </a>
-            </li>
-        @endcan
-        @can('domain_access')
-            <li class="c-sidebar-nav-item">
-                <a href="{{ route("admin.domains.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/domains") || request()->is("admin/domains/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
-
-                    </i>
-                    {{ trans('cruds.domain.title') }}
-                </a>
             </li>
         @endcan
         @can('patient_access')

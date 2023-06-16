@@ -21,27 +21,11 @@ class StoreTimingRequest extends FormRequest
                 'required',
                 'integer',
             ],
-            'form' => [
+            'start_hour' => [
                 'date_format:' . config('panel.time_format'),
                 'nullable',
             ],
-            'to' => [
-                'date_format:' . config('panel.time_format'),
-                'nullable',
-            ],
-            'before_from' => [
-                'date_format:' . config('panel.time_format'),
-                'nullable',
-            ],
-            'before_to' => [
-                'date_format:' . config('panel.time_format'),
-                'nullable',
-            ],
-            'after_from' => [
-                'date_format:' . config('panel.time_format'),
-                'nullable',
-            ],
-            'after_to' => [
+            'end_hour' => [
                 'date_format:' . config('panel.time_format'),
                 'nullable',
             ],

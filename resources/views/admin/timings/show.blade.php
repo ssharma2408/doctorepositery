@@ -41,58 +41,18 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.timing.fields.shift') }}
+                            {{ trans('cruds.timing.fields.start_hour') }}
                         </th>
                         <td>
-                            {{ App\Models\Timing::SHIFT_RADIO[$timing->shift] ?? '' }}
+                            {{ $timing->start_hour }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.timing.fields.form') }}
+                            {{ trans('cruds.timing.fields.end_hour') }}
                         </th>
                         <td>
-                            {{ $timing->form }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.timing.fields.to') }}
-                        </th>
-                        <td>
-                            {{ $timing->to }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.timing.fields.before_from') }}
-                        </th>
-                        <td>
-                            {{ $timing->before_from }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.timing.fields.before_to') }}
-                        </th>
-                        <td>
-                            {{ $timing->before_to }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.timing.fields.after_from') }}
-                        </th>
-                        <td>
-                            {{ $timing->after_from }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.timing.fields.after_to') }}
-                        </th>
-                        <td>
-                            {{ $timing->after_to }}
+                            {{ $timing->end_hour }}
                         </td>
                     </tr>
                 </tbody>

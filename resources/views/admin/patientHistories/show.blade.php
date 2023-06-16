@@ -36,7 +36,7 @@
                             {{ trans('cruds.patientHistory.fields.doctor') }}
                         </th>
                         <td>
-                            {{ $patientHistory->doctor->mobile_number ?? '' }}
+                            {{ $patientHistory->doctor->name ?? '' }}
                         </td>
                     </tr>
                     <tr>

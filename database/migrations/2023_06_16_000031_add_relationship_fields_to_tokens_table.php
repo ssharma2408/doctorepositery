@@ -11,10 +11,10 @@ class AddRelationshipFieldsToTokensTable extends Migration
         Schema::table('tokens', function (Blueprint $table) {
             $table->unsignedBigInteger('clinic_id')->nullable();
             $table->foreign('clinic_id', 'clinic_fk_8602717')->references('id')->on('clinics');
+            $table->unsignedBigInteger('doctor_id')->nullable();
+            $table->foreign('doctor_id', 'doctor_fk_8634625')->references('id')->on('users');
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->foreign('patient_id', 'patient_fk_8602718')->references('id')->on('patients');
-            $table->unsignedBigInteger('doctor_id')->nullable();
-            $table->foreign('doctor_id', 'doctor_fk_8602719')->references('id')->on('doctors');
         });
     }
 }

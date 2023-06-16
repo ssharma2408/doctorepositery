@@ -7,9 +7,9 @@ use App\Http\Requests\MassDestroyTokenRequest;
 use App\Http\Requests\StoreTokenRequest;
 use App\Http\Requests\UpdateTokenRequest;
 use App\Models\Clinic;
-use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Token;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ class TokenController extends Controller
     {
         abort_if(Gate::denies('token_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $tokens = Token::with(['clinic', 'patient', 'doctor'])->get();
+        $tokens = Token::with(['clinic', 'doctor', 'patient'])->get();
 
         return view('admin.tokens.index', compact('tokens'));
     }
@@ -31,9 +31,9 @@ class TokenController extends Controller
 
         $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $patients = Patient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctors = Doctor::pluck('mobile_number', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $patients = Patient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         return view('admin.tokens.create', compact('clinics', 'doctors', 'patients'));
     }
@@ -51,11 +51,11 @@ class TokenController extends Controller
 
         $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
+        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
         $patients = Patient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctors = Doctor::pluck('mobile_number', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $token->load('clinic', 'patient', 'doctor');
+        $token->load('clinic', 'doctor', 'patient');
 
         return view('admin.tokens.edit', compact('clinics', 'doctors', 'patients', 'token'));
     }
@@ -71,7 +71,7 @@ class TokenController extends Controller
     {
         abort_if(Gate::denies('token_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $token->load('clinic', 'patient', 'doctor');
+        $token->load('clinic', 'doctor', 'patient');
 
         return view('admin.tokens.show', compact('token'));
     }

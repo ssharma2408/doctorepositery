@@ -14,11 +14,6 @@ class ClosedTiming extends Model
 
     public $table = 'closed_timings';
 
-    public const FULL_PARTIAL_RADIO = [
-        '1' => 'Full Day',
-        '2' => 'Partial',
-    ];
-
     protected $dates = [
         'closed_on',
         'created_at',
@@ -28,10 +23,7 @@ class ClosedTiming extends Model
 
     protected $fillable = [
         'user_id',
-        'full_partial',
         'closed_on',
-        'from',
-        'to',
         'created_at',
         'updated_at',
         'deleted_at',
