@@ -14,7 +14,7 @@ class Staff extends Model
 
     public $table = 'staffs';
 
-    /* protected $hidden = [
+   /*  protected $hidden = [
         'password',
     ]; */
 

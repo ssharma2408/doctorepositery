@@ -93,7 +93,7 @@
                         </th>
                         <td>
                             @foreach($clinic->doctors as $key => $doctor)
-                                <span class="label label-info">{{ $doctor->mobile_number }}</span>
+                                <span class="label label-info">{{ $doctor->name }}</span>
                             @endforeach
                         </td>
                     </tr>

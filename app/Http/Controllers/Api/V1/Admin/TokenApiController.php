@@ -17,7 +17,7 @@ class TokenApiController extends Controller
     {
         abort_if(Gate::denies('token_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new TokenResource(Token::with(['clinic', 'patient', 'doctor'])->get());
+        return new TokenResource(Token::with(['clinic', 'doctor', 'patient'])->get());
     }
 
     public function store(StoreTokenRequest $request)
@@ -33,7 +33,7 @@ class TokenApiController extends Controller
     {
         abort_if(Gate::denies('token_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new TokenResource($token->load(['clinic', 'patient', 'doctor']));
+        return new TokenResource($token->load(['clinic', 'doctor', 'patient']));
     }
 
     public function update(UpdateTokenRequest $request, Token $token)

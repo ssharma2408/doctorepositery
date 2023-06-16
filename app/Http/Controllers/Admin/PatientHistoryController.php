@@ -7,9 +7,9 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyPatientHistoryRequest;
 use App\Http\Requests\StorePatientHistoryRequest;
 use App\Http\Requests\UpdatePatientHistoryRequest;
-use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\PatientHistory;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -34,7 +34,7 @@ class PatientHistoryController extends Controller
 
         $patients = Patient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctors = Doctor::pluck('mobile_number', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         return view('admin.patientHistories.create', compact('doctors', 'patients'));
     }
@@ -56,7 +56,7 @@ class PatientHistoryController extends Controller
 
         $patients = Patient::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctors = Doctor::pluck('mobile_number', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $patientHistory->load('patient', 'doctor');
 

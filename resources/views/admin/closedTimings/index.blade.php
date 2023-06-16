@@ -29,16 +29,7 @@
                             {{ trans('cruds.closedTiming.fields.user') }}
                         </th>
                         <th>
-                            {{ trans('cruds.closedTiming.fields.full_partial') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.closedTiming.fields.closed_on') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.closedTiming.fields.from') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.closedTiming.fields.to') }}
                         </th>
                         <th>
                             &nbsp;
@@ -58,16 +49,7 @@
                                 {{ $closedTiming->user->name ?? '' }}
                             </td>
                             <td>
-                                {{ App\Models\ClosedTiming::FULL_PARTIAL_RADIO[$closedTiming->full_partial] ?? '' }}
-                            </td>
-                            <td>
                                 {{ $closedTiming->closed_on ?? '' }}
-                            </td>
-                            <td>
-                                {{ $closedTiming->from ?? '' }}
-                            </td>
-                            <td>
-                                {{ $closedTiming->to ?? '' }}
                             </td>
                             <td>
                                 @can('closed_timing_show')

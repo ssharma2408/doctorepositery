@@ -28,6 +28,10 @@ class StoreUserRequest extends FormRequest
             'password' => [
                 'required',
             ],
+            'mobile_number' => [
+                'string',
+                'required',
+            ],
             'roles.*' => [
                 'integer',
             ],

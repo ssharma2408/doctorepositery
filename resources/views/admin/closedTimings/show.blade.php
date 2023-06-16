@@ -33,34 +33,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.closedTiming.fields.full_partial') }}
-                        </th>
-                        <td>
-                            {{ App\Models\ClosedTiming::FULL_PARTIAL_RADIO[$closedTiming->full_partial] ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
                             {{ trans('cruds.closedTiming.fields.closed_on') }}
                         </th>
                         <td>
                             {{ $closedTiming->closed_on }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.closedTiming.fields.from') }}
-                        </th>
-                        <td>
-                            {{ $closedTiming->from }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.closedTiming.fields.to') }}
-                        </th>
-                        <td>
-                            {{ $closedTiming->to }}
                         </td>
                     </tr>
                 </tbody>

@@ -116,227 +116,227 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 27,
-                'title' => 'doctor_create',
-            ],
-            [
-                'id'    => 28,
-                'title' => 'doctor_edit',
-            ],
-            [
-                'id'    => 29,
-                'title' => 'doctor_show',
-            ],
-            [
-                'id'    => 30,
-                'title' => 'doctor_delete',
-            ],
-            [
-                'id'    => 31,
-                'title' => 'doctor_access',
-            ],
-            [
-                'id'    => 32,
                 'title' => 'staff_create',
             ],
             [
-                'id'    => 33,
+                'id'    => 28,
                 'title' => 'staff_edit',
             ],
             [
-                'id'    => 34,
+                'id'    => 29,
                 'title' => 'staff_show',
             ],
             [
-                'id'    => 35,
+                'id'    => 30,
                 'title' => 'staff_delete',
             ],
             [
-                'id'    => 36,
+                'id'    => 31,
                 'title' => 'staff_access',
             ],
             [
-                'id'    => 37,
+                'id'    => 32,
                 'title' => 'content_management_access',
             ],
             [
-                'id'    => 38,
+                'id'    => 33,
                 'title' => 'content_category_create',
             ],
             [
-                'id'    => 39,
+                'id'    => 34,
                 'title' => 'content_category_edit',
             ],
             [
-                'id'    => 40,
+                'id'    => 35,
                 'title' => 'content_category_show',
             ],
             [
-                'id'    => 41,
+                'id'    => 36,
                 'title' => 'content_category_delete',
             ],
             [
-                'id'    => 42,
+                'id'    => 37,
                 'title' => 'content_category_access',
             ],
             [
-                'id'    => 43,
+                'id'    => 38,
                 'title' => 'content_tag_create',
             ],
             [
-                'id'    => 44,
+                'id'    => 39,
                 'title' => 'content_tag_edit',
             ],
             [
-                'id'    => 45,
+                'id'    => 40,
                 'title' => 'content_tag_show',
             ],
             [
-                'id'    => 46,
+                'id'    => 41,
                 'title' => 'content_tag_delete',
             ],
             [
-                'id'    => 47,
+                'id'    => 42,
                 'title' => 'content_tag_access',
             ],
             [
-                'id'    => 48,
+                'id'    => 43,
                 'title' => 'content_page_create',
             ],
             [
-                'id'    => 49,
+                'id'    => 44,
                 'title' => 'content_page_edit',
             ],
             [
-                'id'    => 50,
+                'id'    => 45,
                 'title' => 'content_page_show',
             ],
             [
-                'id'    => 51,
+                'id'    => 46,
                 'title' => 'content_page_delete',
             ],
             [
-                'id'    => 52,
+                'id'    => 47,
                 'title' => 'content_page_access',
             ],
             [
-                'id'    => 53,
+                'id'    => 48,
                 'title' => 'timing_create',
             ],
             [
-                'id'    => 54,
+                'id'    => 49,
                 'title' => 'timing_edit',
             ],
             [
-                'id'    => 55,
+                'id'    => 50,
                 'title' => 'timing_show',
             ],
             [
-                'id'    => 56,
+                'id'    => 51,
                 'title' => 'timing_delete',
             ],
             [
-                'id'    => 57,
+                'id'    => 52,
                 'title' => 'timing_access',
             ],
             [
-                'id'    => 58,
+                'id'    => 53,
                 'title' => 'closed_timing_create',
             ],
             [
-                'id'    => 59,
+                'id'    => 54,
                 'title' => 'closed_timing_edit',
             ],
             [
-                'id'    => 60,
+                'id'    => 55,
                 'title' => 'closed_timing_show',
             ],
             [
-                'id'    => 61,
+                'id'    => 56,
                 'title' => 'closed_timing_delete',
             ],
             [
-                'id'    => 62,
+                'id'    => 57,
                 'title' => 'closed_timing_access',
             ],
             [
-                'id'    => 63,
+                'id'    => 58,
                 'title' => 'domain_create',
             ],
             [
-                'id'    => 64,
+                'id'    => 59,
                 'title' => 'domain_edit',
             ],
             [
-                'id'    => 65,
+                'id'    => 60,
                 'title' => 'domain_show',
             ],
             [
-                'id'    => 66,
+                'id'    => 61,
                 'title' => 'domain_delete',
             ],
             [
-                'id'    => 67,
+                'id'    => 62,
                 'title' => 'domain_access',
             ],
             [
-                'id'    => 68,
+                'id'    => 63,
                 'title' => 'patient_create',
             ],
             [
-                'id'    => 69,
+                'id'    => 64,
                 'title' => 'patient_edit',
             ],
             [
-                'id'    => 70,
+                'id'    => 65,
                 'title' => 'patient_show',
             ],
             [
-                'id'    => 71,
+                'id'    => 66,
                 'title' => 'patient_delete',
             ],
             [
-                'id'    => 72,
+                'id'    => 67,
                 'title' => 'patient_access',
             ],
             [
-                'id'    => 73,
+                'id'    => 68,
                 'title' => 'patient_history_create',
             ],
             [
-                'id'    => 74,
+                'id'    => 69,
                 'title' => 'patient_history_edit',
             ],
             [
-                'id'    => 75,
+                'id'    => 70,
                 'title' => 'patient_history_show',
             ],
             [
-                'id'    => 76,
+                'id'    => 71,
                 'title' => 'patient_history_delete',
             ],
             [
-                'id'    => 77,
+                'id'    => 72,
                 'title' => 'patient_history_access',
             ],
             [
-                'id'    => 78,
+                'id'    => 73,
                 'title' => 'token_create',
             ],
             [
-                'id'    => 79,
+                'id'    => 74,
                 'title' => 'token_edit',
             ],
             [
-                'id'    => 80,
+                'id'    => 75,
                 'title' => 'token_show',
             ],
             [
-                'id'    => 81,
+                'id'    => 76,
                 'title' => 'token_delete',
             ],
             [
-                'id'    => 82,
+                'id'    => 77,
                 'title' => 'token_access',
+            ],
+            [
+                'id'    => 78,
+                'title' => 'opening_hour_create',
+            ],
+            [
+                'id'    => 79,
+                'title' => 'opening_hour_edit',
+            ],
+            [
+                'id'    => 80,
+                'title' => 'opening_hour_show',
+            ],
+            [
+                'id'    => 81,
+                'title' => 'opening_hour_delete',
+            ],
+            [
+                'id'    => 82,
+                'title' => 'opening_hour_access',
             ],
             [
                 'id'    => 83,

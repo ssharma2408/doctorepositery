@@ -8,9 +8,6 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::post('clinics/media', 'ClinicApiController@storeMedia')->name('clinics.storeMedia');
     Route::apiResource('clinics', 'ClinicApiController');
 
-    // Doctor
-    Route::apiResource('doctors', 'DoctorApiController');
-
     // Staff
     Route::apiResource('staffs', 'StaffApiController');
 
