@@ -9,14 +9,23 @@ use App\Http\Requests\UpdateOpeningHourRequest;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\User;
 
 class OpeningHoursController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('opening_hour_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('opening_hour_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');		
 
-        return view('admin.openingHours.index');
+		$users = User::with('roles')->get();
+		$user_arr = [];
+		foreach($users as $user){
+			if($user->roles[0]->title != "Super Admin"){
+				$user_arr[str_replace(' ', '_', $user->roles[0]->title)][] = $user;
+			}
+		}		
+		
+        return view('admin.openingHours.index', compact('user_arr'));
     }
 
     public function create()
