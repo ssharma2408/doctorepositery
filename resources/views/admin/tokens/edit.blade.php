@@ -35,20 +35,6 @@
                 <span class="help-block">{{ trans('cruds.token.fields.clinic_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="patient_id">{{ trans('cruds.token.fields.patient') }}</label>
-                <select class="form-control select2 {{ $errors->has('patient') ? 'is-invalid' : '' }}" name="patient_id" id="patient_id" required>
-                    @foreach($patients as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('patient_id') ? old('patient_id') : $token->patient->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('patient'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('patient') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.token.fields.patient_helper') }}</span>
-            </div>
-            <div class="form-group">
                 <label class="required" for="doctor_id">{{ trans('cruds.token.fields.doctor') }}</label>
                 <select class="form-control select2 {{ $errors->has('doctor') ? 'is-invalid' : '' }}" name="doctor_id" id="doctor_id" required>
                     @foreach($doctors as $id => $entry)
@@ -61,6 +47,20 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.token.fields.doctor_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="patient_id">{{ trans('cruds.token.fields.patient') }}</label>
+                <select class="form-control select2 {{ $errors->has('patient') ? 'is-invalid' : '' }}" name="patient_id" id="patient_id" required>
+                    @foreach($patients as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('patient_id') ? old('patient_id') : $token->patient->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('patient'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('patient') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.token.fields.patient_helper') }}</span>
             </div>
             <div class="form-group">
                 <label class="required" for="estimated_time">{{ trans('cruds.token.fields.estimated_time') }}</label>

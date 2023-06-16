@@ -27,11 +27,11 @@ class UpdateTokenRequest extends FormRequest
                 'required',
                 'integer',
             ],
-            'patient_id' => [
+            'doctor_id' => [
                 'required',
                 'integer',
             ],
-            'doctor_id' => [
+            'patient_id' => [
                 'required',
                 'integer',
             ],

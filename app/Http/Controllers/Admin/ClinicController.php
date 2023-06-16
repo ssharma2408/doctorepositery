@@ -8,7 +8,6 @@ use App\Http\Requests\MassDestroyClinicRequest;
 use App\Http\Requests\StoreClinicRequest;
 use App\Http\Requests\UpdateClinicRequest;
 use App\Models\Clinic;
-use App\Models\Doctor;
 use App\Models\Domain;
 use App\Models\Package;
 use App\Models\User;
@@ -36,15 +35,11 @@ class ClinicController extends Controller
 
         $packages = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic_admins = User::whereHas(
-								'roles', function($q){
-									$q->where('title', 'Clinic Admin');
-								}
-							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $domains = Domain::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctors = Doctor::pluck('mobile_number', 'id');
+        $doctors = User::pluck('name', 'id');
 
         return view('admin.clinics.create', compact('clinic_admins', 'doctors', 'domains', 'packages'));
     }
@@ -66,15 +61,11 @@ class ClinicController extends Controller
 
         $packages = Package::pluck('package', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $clinic_admins = User::whereHas(
-								'roles', function($q){
-									$q->where('title', 'Clinic Admin');
-								}
-							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clinic_admins = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $domains = Domain::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctors = Doctor::pluck('mobile_number', 'id');
+        $doctors = User::pluck('name', 'id');
 
         $clinic->load('package', 'clinic_admin', 'domain', 'doctors');
 

@@ -40,79 +40,24 @@
                 <span class="help-block">{{ trans('cruds.timing.fields.day_helper') }}</span>
             </div>
             <div class="form-group">
-                <label>{{ trans('cruds.timing.fields.shift') }}</label>
-                @foreach(App\Models\Timing::SHIFT_RADIO as $key => $label)
-                    <div class="form-check {{ $errors->has('shift') ? 'is-invalid' : '' }}">
-                        <input class="form-check-input" type="radio" id="shift_{{ $key }}" name="shift" value="{{ $key }}" {{ old('shift', $timing->shift) === (string) $key ? 'checked' : '' }}>
-                        <label class="form-check-label" for="shift_{{ $key }}">{{ $label }}</label>
-                    </div>
-                @endforeach
-                @if($errors->has('shift'))
+                <label for="start_hour">{{ trans('cruds.timing.fields.start_hour') }}</label>
+                <input class="form-control timepicker {{ $errors->has('start_hour') ? 'is-invalid' : '' }}" type="text" name="start_hour" id="start_hour" value="{{ old('start_hour', $timing->start_hour) }}">
+                @if($errors->has('start_hour'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('shift') }}
+                        {{ $errors->first('start_hour') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.timing.fields.shift_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.timing.fields.start_hour_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="form">{{ trans('cruds.timing.fields.form') }}</label>
-                <input class="form-control timepicker {{ $errors->has('form') ? 'is-invalid' : '' }}" type="text" name="form" id="form" value="{{ old('form', $timing->form) }}">
-                @if($errors->has('form'))
+                <label for="end_hour">{{ trans('cruds.timing.fields.end_hour') }}</label>
+                <input class="form-control timepicker {{ $errors->has('end_hour') ? 'is-invalid' : '' }}" type="text" name="end_hour" id="end_hour" value="{{ old('end_hour', $timing->end_hour) }}">
+                @if($errors->has('end_hour'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('form') }}
+                        {{ $errors->first('end_hour') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.timing.fields.form_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="to">{{ trans('cruds.timing.fields.to') }}</label>
-                <input class="form-control timepicker {{ $errors->has('to') ? 'is-invalid' : '' }}" type="text" name="to" id="to" value="{{ old('to', $timing->to) }}">
-                @if($errors->has('to'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('to') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.timing.fields.to_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="before_from">{{ trans('cruds.timing.fields.before_from') }}</label>
-                <input class="form-control timepicker {{ $errors->has('before_from') ? 'is-invalid' : '' }}" type="text" name="before_from" id="before_from" value="{{ old('before_from', $timing->before_from) }}">
-                @if($errors->has('before_from'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('before_from') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.timing.fields.before_from_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="before_to">{{ trans('cruds.timing.fields.before_to') }}</label>
-                <input class="form-control timepicker {{ $errors->has('before_to') ? 'is-invalid' : '' }}" type="text" name="before_to" id="before_to" value="{{ old('before_to', $timing->before_to) }}">
-                @if($errors->has('before_to'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('before_to') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.timing.fields.before_to_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="after_from">{{ trans('cruds.timing.fields.after_from') }}</label>
-                <input class="form-control timepicker {{ $errors->has('after_from') ? 'is-invalid' : '' }}" type="text" name="after_from" id="after_from" value="{{ old('after_from', $timing->after_from) }}">
-                @if($errors->has('after_from'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('after_from') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.timing.fields.after_from_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label for="after_to">{{ trans('cruds.timing.fields.after_to') }}</label>
-                <input class="form-control timepicker {{ $errors->has('after_to') ? 'is-invalid' : '' }}" type="text" name="after_to" id="after_to" value="{{ old('after_to', $timing->after_to) }}">
-                @if($errors->has('after_to'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('after_to') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.timing.fields.after_to_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.timing.fields.end_hour_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

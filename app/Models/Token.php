@@ -22,8 +22,8 @@ class Token extends Model
     protected $fillable = [
         'token_number',
         'clinic_id',
-        'patient_id',
         'doctor_id',
+        'patient_id',
         'estimated_time',
         'created_at',
         'updated_at',
@@ -40,13 +40,13 @@ class Token extends Model
         return $this->belongsTo(Clinic::class, 'clinic_id');
     }
 
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
+
     public function patient()
     {
         return $this->belongsTo(Patient::class, 'patient_id');
-    }
-
-    public function doctor()
-    {
-        return $this->belongsTo(Doctor::class, 'doctor_id');
     }
 }

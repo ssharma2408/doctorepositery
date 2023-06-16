@@ -19,9 +19,14 @@ class Timing extends Model
         'deleted_at',
     ];
 
-    public const SHIFT_RADIO = [
-        '1' => 'One Shift',
-        '2' => 'Two Shift',
+    protected $fillable = [
+        'user_id',
+        'day',
+        'start_hour',
+        'end_hour',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public const DAY_SELECT = [
@@ -32,21 +37,6 @@ class Timing extends Model
         '5' => 'Friday',
         '6' => 'Saturday',
         '7' => 'Sunday',
-    ];
-
-    protected $fillable = [
-        'user_id',
-        'day',
-        'shift',
-        'form',
-        'to',
-        'before_from',
-        'before_to',
-        'after_from',
-        'after_to',
-        'created_at',
-        'updated_at',
-        'deleted_at',
     ];
 
     protected function serializeDate(DateTimeInterface $date)

@@ -55,7 +55,7 @@
                                 {{ $patientHistory->patient->name ?? '' }}
                             </td>
                             <td>
-                                {{ $patientHistory->doctor->mobile_number ?? '' }}
+                                {{ $patientHistory->doctor->name ?? '' }}
                             </td>
                             <td>
                                 {{ $patientHistory->visit_date ?? '' }}

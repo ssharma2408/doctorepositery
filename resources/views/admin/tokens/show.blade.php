@@ -41,18 +41,18 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.token.fields.patient') }}
+                            {{ trans('cruds.token.fields.doctor') }}
                         </th>
                         <td>
-                            {{ $token->patient->name ?? '' }}
+                            {{ $token->doctor->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.token.fields.doctor') }}
+                            {{ trans('cruds.token.fields.patient') }}
                         </th>
                         <td>
-                            {{ $token->doctor->mobile_number ?? '' }}
+                            {{ $token->patient->name ?? '' }}
                         </td>
                     </tr>
                     <tr>

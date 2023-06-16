@@ -32,25 +32,10 @@
                             {{ trans('cruds.timing.fields.day') }}
                         </th>
                         <th>
-                            {{ trans('cruds.timing.fields.shift') }}
+                            {{ trans('cruds.timing.fields.start_hour') }}
                         </th>
                         <th>
-                            {{ trans('cruds.timing.fields.form') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.timing.fields.to') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.timing.fields.before_from') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.timing.fields.before_to') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.timing.fields.after_from') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.timing.fields.after_to') }}
+                            {{ trans('cruds.timing.fields.end_hour') }}
                         </th>
                         <th>
                             &nbsp;
@@ -73,25 +58,10 @@
                                 {{ App\Models\Timing::DAY_SELECT[$timing->day] ?? '' }}
                             </td>
                             <td>
-                                {{ App\Models\Timing::SHIFT_RADIO[$timing->shift] ?? '' }}
+                                {{ $timing->start_hour ?? '' }}
                             </td>
                             <td>
-                                {{ $timing->form ?? '' }}
-                            </td>
-                            <td>
-                                {{ $timing->to ?? '' }}
-                            </td>
-                            <td>
-                                {{ $timing->before_from ?? '' }}
-                            </td>
-                            <td>
-                                {{ $timing->before_to ?? '' }}
-                            </td>
-                            <td>
-                                {{ $timing->after_from ?? '' }}
-                            </td>
-                            <td>
-                                {{ $timing->after_to ?? '' }}
+                                {{ $timing->end_hour ?? '' }}
                             </td>
                             <td>
                                 @can('timing_show')

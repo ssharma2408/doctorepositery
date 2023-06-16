@@ -35,10 +35,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('clinics/ckmedia', 'ClinicController@storeCKEditorImages')->name('clinics.storeCKEditorImages');
     Route::resource('clinics', 'ClinicController');
 
-    // Doctor
-    Route::delete('doctors/destroy', 'DoctorController@massDestroy')->name('doctors.massDestroy');
-    Route::resource('doctors', 'DoctorController');
-
     // Staff
     Route::delete('staffs/destroy', 'StaffController@massDestroy')->name('staffs.massDestroy');
     Route::resource('staffs', 'StaffController');
@@ -82,6 +78,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Token
     Route::delete('tokens/destroy', 'TokenController@massDestroy')->name('tokens.massDestroy');
     Route::resource('tokens', 'TokenController');
+
+    // Opening Hours
+    Route::delete('opening-hours/destroy', 'OpeningHoursController@massDestroy')->name('opening-hours.massDestroy');
+    Route::resource('opening-hours', 'OpeningHoursController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password

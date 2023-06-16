@@ -21,19 +21,8 @@ class StoreClosedTimingRequest extends FormRequest
                 'required',
                 'integer',
             ],
-            'full_partial' => [
-                'required',
-            ],
             'closed_on' => [
                 'date_format:' . config('panel.date_format'),
-                'nullable',
-            ],
-            'from' => [
-                'date_format:' . config('panel.time_format'),
-                'nullable',
-            ],
-            'to' => [
-                'date_format:' . config('panel.time_format'),
                 'nullable',
             ],
         ];
