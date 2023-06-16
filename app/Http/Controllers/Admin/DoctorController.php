@@ -28,7 +28,11 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $doctors = User::whereHas(
+								'roles', function($q){
+									$q->where('title', 'Doctor');
+								}
+							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $clinics = Clinic::pluck('name', 'id');
 
@@ -47,7 +51,11 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $doctors = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $doctors = User::whereHas(
+								'roles', function($q){
+									$q->where('title', 'Doctor');
+								}
+							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $clinics = Clinic::pluck('name', 'id');
 

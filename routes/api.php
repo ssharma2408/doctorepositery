@@ -43,3 +43,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Token
     Route::apiResource('tokens', 'TokenApiController');
 });
+
+Route::controller(Api\V1\Admin\RegisterController::class)->group(function(){
+	Route::post('patient_register', 'register');
+    Route::post('login', 'login');
+	Route::post('patientlogin', 'generate');
+	Route::post('patientloginwithotp', 'loginWithOtp');
+});

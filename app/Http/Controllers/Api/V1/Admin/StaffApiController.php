@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StaffApiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new StaffResource(Staff::with(['clinic'])->get());
+        return new StaffResource(Staff::where('clinic_id', $request->clinic_id)->with(['clinic'])->get());
     }
 
     public function store(StoreStaffRequest $request)
@@ -31,7 +31,7 @@ class StaffApiController extends Controller
 
     public function show(Staff $staff)
     {
-        abort_if(Gate::denies('staff_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('staff_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return new StaffResource($staff->load(['clinic']));
     }
@@ -47,7 +47,7 @@ class StaffApiController extends Controller
 
     public function destroy(Staff $staff)
     {
-        abort_if(Gate::denies('staff_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('staff_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $staff->delete();
 
