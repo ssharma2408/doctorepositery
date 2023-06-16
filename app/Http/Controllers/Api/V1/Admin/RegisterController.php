@@ -73,8 +73,16 @@ class RegisterController extends BaseController
 					$clinic = Clinic::where('clinic_admin_id', $user->id)->first();
 				}else{
 					
-					$doctor = Doctor::where('doctor_id', $user->id)->first();					
-					$clinic = Clinic::where('id', $doctor->clinic_id)->first();				
+					$doctor = Doctor::where('doctor_id', $user->id)->first();
+					$clinic_arr = [];
+					foreach($doctor->clinics as $clinic){
+						$clinic_arr[] = $clinic->id;
+					}
+					if(in_array($request->clinic_id, $clinic_arr)){
+						$clinic = Clinic::where('id', $request->clinic_id)->first();
+					}else{
+						return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this doamin']);
+					}
 				}			
 				
 				if( ! $clinic['status']){
@@ -91,7 +99,7 @@ class RegisterController extends BaseController
 					$success['token'] =  $user->createToken('MyApp')->plainTextToken; 
 					$success['name'] =  $user->name;
 					$success['role'] =  $user_role;
-					$success['postfix'] =  $clinic->prefix;
+					$success['prefix'] =  $clinic->prefix;
 
 					return $this->sendResponse($success, 'User login successfully.');
 				}else{

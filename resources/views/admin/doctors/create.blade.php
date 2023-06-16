@@ -20,20 +20,6 @@
                 <span class="help-block">{{ trans('cruds.doctor.fields.mobile_number_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="clinic_id">{{ trans('cruds.doctor.fields.clinic') }}</label>
-                <select class="form-control select2 {{ $errors->has('clinic') ? 'is-invalid' : '' }}" name="clinic_id" id="clinic_id">
-                    @foreach($clinics as $id => $entry)
-                        <option value="{{ $id }}" {{ old('clinic_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('clinic'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('clinic') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.doctor.fields.clinic_helper') }}</span>
-            </div>
-            <div class="form-group">
                 <label class="required" for="doctor_id">{{ trans('cruds.doctor.fields.doctor') }}</label>
                 <select class="form-control select2 {{ $errors->has('doctor') ? 'is-invalid' : '' }}" name="doctor_id" id="doctor_id" required>
                     @foreach($doctors as $id => $entry)
@@ -46,6 +32,24 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.doctor.fields.doctor_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="clinics">{{ trans('cruds.doctor.fields.clinic') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('clinics') ? 'is-invalid' : '' }}" name="clinics[]" id="clinics" multiple>
+                    @foreach($clinics as $id => $clinic)
+                        <option value="{{ $id }}" {{ in_array($id, old('clinics', [])) ? 'selected' : '' }}>{{ $clinic }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('clinics'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('clinics') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.doctor.fields.clinic_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

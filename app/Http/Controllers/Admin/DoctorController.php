@@ -19,7 +19,7 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $doctors = Doctor::with(['clinic', 'doctor'])->get();
+        $doctors = Doctor::with(['doctor', 'clinics'])->get();
 
         return view('admin.doctors.index', compact('doctors'));
     }
@@ -28,13 +28,13 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $doctors = User::whereHas(
 								'roles', function($q){
 									$q->where('title', 'Doctor');
 								}
 							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $clinics = Clinic::pluck('name', 'id');
 
         return view('admin.doctors.create', compact('clinics', 'doctors'));
     }
@@ -42,6 +42,7 @@ class DoctorController extends Controller
     public function store(StoreDoctorRequest $request)
     {
         $doctor = Doctor::create($request->all());
+        $doctor->clinics()->sync($request->input('clinics', []));
 
         return redirect()->route('admin.doctors.index');
     }
@@ -50,15 +51,15 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $clinics = Clinic::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $doctors = User::whereHas(
 								'roles', function($q){
 									$q->where('title', 'Doctor');
 								}
 							)->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $doctor->load('clinic', 'doctor');
+        $clinics = Clinic::pluck('name', 'id');
+
+        $doctor->load('doctor', 'clinics');
 
         return view('admin.doctors.edit', compact('clinics', 'doctor', 'doctors'));
     }
@@ -66,6 +67,7 @@ class DoctorController extends Controller
     public function update(UpdateDoctorRequest $request, Doctor $doctor)
     {
         $doctor->update($request->all());
+        $doctor->clinics()->sync($request->input('clinics', []));
 
         return redirect()->route('admin.doctors.index');
     }
@@ -74,7 +76,7 @@ class DoctorController extends Controller
     {
         abort_if(Gate::denies('doctor_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $doctor->load('clinic', 'doctor');
+        $doctor->load('doctor', 'clinics');
 
         return view('admin.doctors.show', compact('doctor'));
     }

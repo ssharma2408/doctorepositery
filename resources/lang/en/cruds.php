@@ -111,6 +111,8 @@ return [
             'domain_helper'             => ' ',
             'status'                    => 'Status',
             'status_helper'             => ' ',
+            'doctor'                    => 'Doctor',
+            'doctor_helper'             => ' ',
         ],
     ],
     'doctor' => [
@@ -127,10 +129,10 @@ return [
             'deleted_at_helper'    => ' ',
             'mobile_number'        => 'Mobile Number',
             'mobile_number_helper' => ' ',
-            'clinic'               => 'Clinic',
-            'clinic_helper'        => ' ',
             'doctor'               => 'Doctor',
             'doctor_helper'        => ' ',
+            'clinic'               => 'Clinic',
+            'clinic_helper'        => ' ',
         ],
     ],
     'staff' => [
