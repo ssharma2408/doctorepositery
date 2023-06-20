@@ -23,7 +23,7 @@ class OpeningHoursController extends Controller
 		
 		$users = User::with('roles')->get();			
 		
-		$timings = Timing::orderBy('start_hour')->get();		
+		$timings = Timing::orderBy('start_hour')->get();
 		
 		if(!empty($timings)){
 			foreach($timings as $timing){
