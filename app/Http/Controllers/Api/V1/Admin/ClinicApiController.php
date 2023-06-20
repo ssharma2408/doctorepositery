@@ -8,6 +8,7 @@ use App\Http\Requests\StoreClinicRequest;
 use App\Http\Requests\UpdateClinicRequest;
 use App\Http\Resources\Admin\ClinicResource;
 use App\Models\Clinic;
+use App\Models\Timing;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +36,11 @@ class ClinicApiController extends Controller
 
     public function show(Clinic $clinic)
     {
-        abort_if(Gate::denies('clinic_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('clinic_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		
+		$timings = Timing::where('user_id', $clinic->clinic_admin->id)->orderBy('start_hour')->get();
+
+		$clinic->opening_hours = $timings;
 
         return new ClinicResource($clinic->load(['package', 'clinic_admin', 'domain', 'doctors']));
     }
