@@ -91,6 +91,13 @@
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
                                 @endcan
+								@foreach($user->roles as $key => $item)
+                                    @if($item->title !="Super Admin")
+										<a class="btn btn-xs btn-primary" href="{{ route('admin.opening-hours.index', ['user_id'=>$user->id, 'role'=>Str::replace(' ', '_', $item->title)]) }}">
+											Timings
+										</a>
+									@endif
+                                @endforeach
 
                             </td>
 
