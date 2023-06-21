@@ -10,7 +10,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Clinic
     Route::post('clinics/media', 'ClinicApiController@storeMedia')->name('clinics.storeMedia');
-    Route::apiResource('clinics', 'ClinicApiController');
+    Route::apiResource('clinics', 'ClinicApiController');		
+	Route::get('doctors/{clinic_id}', 'ClinicApiController@doctors');
+	Route::get('doctors/{clinic_id}/{doctor_id}', 'ClinicApiController@get_doctor');
 
     // Staff
     Route::apiResource('staffs', 'StaffApiController');
@@ -27,6 +29,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Timing
     Route::apiResource('timings', 'TimingApiController');
+	Route::post('timings-save', 'TimingApiController@save');
 
     // Closed Timing
 	Route::get('closed-timings/{user_id}', 'ClosedTimingApiController@get_closed_day');
@@ -43,8 +46,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('patient-histories', 'PatientHistoryApiController');
 
     // Token
-    Route::apiResource('tokens', 'TokenApiController');
-	
+    Route::apiResource('tokens', 'TokenApiController');	
 });
 
 Route::controller(Api\V1\Admin\RegisterController::class)->group(function(){

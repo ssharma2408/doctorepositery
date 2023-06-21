@@ -20,6 +20,7 @@ class Timing extends Model
 
     protected $fillable = [
         'user_id',
+        'clinic_id',
         'day',
         'start_hour',
         'end_hour',

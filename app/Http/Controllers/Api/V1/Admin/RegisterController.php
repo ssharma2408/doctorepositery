@@ -97,6 +97,7 @@ class RegisterController extends BaseController
 				if($clinic->id == $request->clinic_id){
 					$success['token'] =  $user->createToken('MyApp')->plainTextToken; 
 					$success['name'] =  $user->name;
+					$success['user_id'] =  $user->id;
 					$success['role'] =  $user_role;
 					$success['prefix'] =  $clinic->prefix;
 
