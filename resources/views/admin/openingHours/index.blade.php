@@ -48,7 +48,11 @@
 																Close at
 																<input type="time" id="" name="close_{{$key+1}}[]" min="07:00" max="23:00" />
 															</div>
-															<div class="col-md-4">
+															<div class="col-md-2">
+																Max Token
+																<input type="number" id="" name="maxtoken_{{$key+1}}[]" min="0" />
+															</div>
+															<div class="col-md-2">
 																<span class="add_row" id="add_row" data-key ="{{$key+1}}">+</span>
 															</div>
 														</div>													
@@ -80,7 +84,11 @@
 																		Close at
 																		<input type="time" id="" name="close_{{$key+1}}[]" min="07:00" max="23:00" value="{{$timing->end_hour}}" />
 																	</div>
-																	<div class="col-md-4">
+																	<div class="col-md-2">
+																		Max Token
+																		<input type="number" id="" name="maxtoken_{{$key+1}}[]" min="0" value="{{$timing->max_token}}" />
+																	</div>
+																	<div class="col-md-2">
 																		@if($slot ==0)
 																			<span class="add_row" id="add_row" data-key ="{{$key+1}}">+</span>
 																		@else
@@ -99,7 +107,11 @@
 																	Close at
 																	<input type="time" id="" name="close_{{$key+1}}[]" min="07:00" max="23:00" />
 																</div>
-																<div class="col-md-4">																		
+																<div class="col-md-2">
+																	Max Token
+																	<input type="number" id="" name="maxtoken_{{$key+1}}[]" min="0" />
+																</div>
+																<div class="col-md-2">																		
 																	<span class="add_row" id="add_row" data-key ="{{$key+1}}">+</span>
 																</div>
 															</div>
@@ -141,7 +153,7 @@
 		});
 		
 		function row_html(key){
-			return '<div class="row mt-2"><div class="col-md-4">Open at <input type="time" id="" name="open_'+key+'[]" min="07:00" max="23:00" /></div><div class="col-md-4">Close at <input type="time" id="" name="close_'+key+'[]" min="07:00" max="23:00" /></div><div class="col-md-4"><span class="remove_row" id="remove_row">-</span></div></div>';	
+			return '<div class="row mt-2"><div class="col-md-4">Open at <input type="time" id="" name="open_'+key+'[]" min="07:00" max="23:00" /></div><div class="col-md-4">Close at <input type="time" id="" name="close_'+key+'[]" min="07:00" max="23:00" /></div><div class="col-md-2">Max Token<input type="number" id="" name="maxtoken_'+key+'[]" min="0" /></div><div class="col-md-2"><span class="remove_row" id="remove_row">-</span></div></div>';	
 		}
 		$(function() {
 			$(".check_day").each(function(){

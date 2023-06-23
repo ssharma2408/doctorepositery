@@ -11,6 +11,7 @@ use App\Models\Clinic;
 use App\Models\Timing;
 use App\Models\User;
 use Gate;
+use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Input;
@@ -77,6 +78,18 @@ class ClinicApiController extends Controller
 		$final_arr = array('opening_hours'=>$timings, 'doctor'=>$doctor);		
 
 		return new ClinicResource($final_arr);
+	}
+	
+	public function doctors_timing(Request $request){
+		
+		$doctors = DB::select('SELECT u.id, u.name, t.day, t.start_hour, t.end_hour
+								FROM clinics c 
+								INNER JOIN clinic_user cu on c.id=cu.clinic_id 
+								INNER JOIN users u on u.id = cu.user_id 
+								INNER JOIN timings t on t.user_id = u.id 
+								WHERE c.id = ?', [$request->clinic_id]);
+		
+		return new ClinicResource($doctors);
 	}
 	
 }

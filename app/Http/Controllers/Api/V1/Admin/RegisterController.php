@@ -219,6 +219,7 @@ class RegisterController extends BaseController
             $patientOtp->update([
                 'expire_at' => now()
             ]);
+			$patient->token =  $patient->createToken('MyApp')->plainTextToken;
 			$patient->role = "Patient";
             //Auth::login($patient);
   
