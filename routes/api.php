@@ -43,11 +43,12 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('patients', 'PatientApiController');
 
     // Patient History
-    Route::post('patient-histories/media', 'PatientHistoryApiController@storeMedia')->name('patient-histories.storeMedia');
+    Route::post('patient-histories/media', 'PatientHistoryApiController@storeMedia')->name('patient-histories.storeMedia');	
     Route::apiResource('patient-histories', 'PatientHistoryApiController');
 
     // Token
 	Route::get('tokens/{clinic_id}/{doctor_id}', 'TokenApiController@get_patients');
+	Route::post('update_token', 'TokenApiController@update_token');
     Route::apiResource('tokens', 'TokenApiController');
 	
 });
