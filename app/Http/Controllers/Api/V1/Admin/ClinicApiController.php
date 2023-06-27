@@ -9,9 +9,12 @@ use App\Http\Requests\UpdateClinicRequest;
 use App\Http\Resources\Admin\ClinicResource;
 use App\Models\Clinic;
 use App\Models\Timing;
+use App\Models\User;
 use Gate;
+use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Input;
 
 class ClinicApiController extends Controller
 {
@@ -63,4 +66,30 @@ class ClinicApiController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+	
+	public function doctors(Request $request){
+		return new ClinicResource(Clinic::where('id', $request->clinic_id)->with(['doctors'])->get());
+	}
+	
+	public function get_doctor(Request $request){
+		$timings = Timing::where('user_id', $request->doctor_id)->orderBy('start_hour')->get();
+		$doctor = User::where('id', $request->doctor_id)->first();
+		
+		$final_arr = array('opening_hours'=>$timings, 'doctor'=>$doctor);		
+
+		return new ClinicResource($final_arr);
+	}
+	
+	public function doctors_timing(Request $request){
+		
+		$doctors = DB::select('SELECT u.id, u.name, t.day, t.start_hour, t.end_hour
+								FROM clinics c 
+								INNER JOIN clinic_user cu on c.id=cu.clinic_id 
+								INNER JOIN users u on u.id = cu.user_id 
+								INNER JOIN timings t on t.user_id = u.id 
+								WHERE c.id = ?', [$request->clinic_id]);
+		
+		return new ClinicResource($doctors);
+	}
+	
 }

@@ -82,7 +82,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Opening Hours
     Route::delete('opening-hours/destroy', 'OpeningHoursController@massDestroy')->name('opening-hours.massDestroy');
     Route::resource('opening-hours', 'OpeningHoursController');
-	Route::post('opening-hours-save', 'OpeningHoursController@save')->name('opening.hours.save');	
+	Route::post('opening-hours-save', 'OpeningHoursController@save')->name('opening.hours.save');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password

@@ -97,6 +97,7 @@ class RegisterController extends BaseController
 				if($clinic->id == $request->clinic_id){
 					$success['token'] =  $user->createToken('MyApp')->plainTextToken; 
 					$success['name'] =  $user->name;
+					$success['user_id'] =  $user->id;
 					$success['role'] =  $user_role;
 					$success['prefix'] =  $clinic->prefix;
 
@@ -218,6 +219,7 @@ class RegisterController extends BaseController
             $patientOtp->update([
                 'expire_at' => now()
             ]);
+			$patient->token =  $patient->createToken('MyApp')->plainTextToken;
 			$patient->role = "Patient";
             //Auth::login($patient);
   

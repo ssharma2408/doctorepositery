@@ -53,4 +53,37 @@ class TimingApiController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+	
+	public function save(Request $request){
+		
+		
+		$timings = Timing::where('user_id', $request->user_id)->get();
+		if(count($timings)){
+			//delete existing
+			Timing::where('user_id', $request->user_id)->delete();
+		}			
+		$data = [];
+		for($i=1; $i <= 7; $i++){
+			for($j = 0; $j < count($request['open_'.$i]); $j++){
+				if($request['open_'.$i][$j] != null && $request['close_'.$i][$j] != null){
+					$timing = [];
+					$timing['user_id'] = $request->user_id;
+					$timing['clinic_id'] = $request->clinic_id;
+					$timing['day'] = $i;
+					$timing['start_hour'] = $request['open_'.$i][$j];
+					$timing['end_hour'] = $request['close_'.$i][$j];
+					$timing['deleted_at'] = null;
+					$timing['created_at'] = date("Y-m-d H:i:s");
+					$timing['updated_at'] = date("Y-m-d H:i:s");
+					$data[] = $timing;
+				}
+			}			
+		}
+		if(!empty($data)){
+			Timing::insert($data);
+		}
+		return (new TimingResource($timing))
+            ->response()
+            ->setStatusCode(Response::HTTP_ACCEPTED);
+	}
 }

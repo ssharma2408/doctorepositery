@@ -11,14 +11,14 @@ class StoreTokenRequest extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('token_create');
+        return true;
+		//return Gate::allows('token_create');
     }
 
     public function rules()
     {
         return [
-            'token_number' => [
-                'required',
+            'token_number' => [                
                 'integer',
                 'min:-2147483648',
                 'max:2147483647',
@@ -36,8 +36,7 @@ class StoreTokenRequest extends FormRequest
                 'integer',
             ],
             'estimated_time' => [
-                'string',
-                'required',
+                'string',                
             ],
         ];
     }
