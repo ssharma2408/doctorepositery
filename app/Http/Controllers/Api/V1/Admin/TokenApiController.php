@@ -38,7 +38,7 @@ class TokenApiController extends Controller
 			//check patient already has token
 			$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id])->get();
 			
-			$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'estimated_time'=>0])->first();			
+			$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'estimated_time'=>0])->first();
 			
 			if(count($exist_token)){
 				$flag = 0;
@@ -116,5 +116,20 @@ class TokenApiController extends Controller
 		
 		
 		return $success;		
+	}
+	
+	public function refresh_status(Request $request){
+		
+		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id])->get();
+			
+		$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'estimated_time'=>0])->first();
+		
+		$token_arr = $exist_token[0];
+		
+		$token_arr['current_token'] = $current_token->token_number;
+		
+		return (new TokenResource($token_arr))
+            ->response()
+            ->setStatusCode(Response::HTTP_ACCEPTED);
 	}
 }

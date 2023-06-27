@@ -48,6 +48,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Token
 	Route::get('tokens/{clinic_id}/{doctor_id}', 'TokenApiController@get_patients');
+	Route::get('refresh_status/{clinic_id}/{doctor_id}/{patient_id}', 'TokenApiController@refresh_status');
 	Route::post('update_token', 'TokenApiController@update_token');
     Route::apiResource('tokens', 'TokenApiController');
 	
