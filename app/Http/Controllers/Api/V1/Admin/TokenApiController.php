@@ -23,9 +23,9 @@ class TokenApiController extends Controller
 
     public function store(StoreTokenRequest $request)
     {
-        $init_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id])->orderBy('token_number', 'DESC')->first();
+        $init_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'timing_id'=>$request->slot_id])->orderBy('token_number', 'DESC')->first();
 		
-		$token_arr = $request->all();
+		$token_arr = $request->all();		
 		
 		$flag = 1;
 		
@@ -34,24 +34,27 @@ class TokenApiController extends Controller
 			$token_arr['token_number'] = 1;
 			$token_arr['estimated_time'] = 00.00;
 			$token_arr['current_token'] = 1;
+			$token_arr['timing_id'] = $request->slot_id;			
 		}else{
 			//check patient already has token
-			$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id])->get();
+			$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id, 'timing_id'=>$request->slot_id])->get();
 			
-			$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'estimated_time'=>0])->first();
+			$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'timing_id'=>$request->slot_id, 'estimated_time'=>0])->first();
 			
 			if(count($exist_token)){
 				$flag = 0;
 				$token_arr = $exist_token[0];
 			}else{				
 				$token_arr['token_number'] = $init_token['token_number'] + 1;
-				$token_arr['estimated_time'] = $init_token['estimated_time'] + 10;				
+				$token_arr['estimated_time'] = $init_token['estimated_time'] + 10;
+				$token_arr['timing_id'] = $request->slot_id;
 			}
 			$token_arr['current_token'] = $current_token->token_number;
 		}	
 
 		if($flag){
 			$token = Token::create($token_arr);
+			$token['current_token'] = $token_arr['current_token'];
 		}else{
 			$token = $token_arr;
 		}		
@@ -88,13 +91,14 @@ class TokenApiController extends Controller
 	
 	public function get_patients(Request $request)
 	{
-		$patients = DB::select('SELECT p.id, p.name, t.token_number, t.status
+		$patients = DB::select('SELECT p.id, p.name, t.token_number, t.status, t.timing_id, tim.start_hour, tim.end_hour
 								FROM patients p 
 								INNER JOIN tokens t on p.id=t.patient_id
+								INNER JOIN timings tim on tim.id=t.timing_id								
                                 WHERE t.status <> 0
 								AND t.clinic_id = ?
 								AND t.doctor_id = ?
-                                ORDER BY t.token_number;', [$request->clinic_id, $request->doctor_id]);
+                                ORDER BY tim.start_hour, t.token_number;', [$request->clinic_id, $request->doctor_id]);
 		return (new TokenResource($patients))
             ->response()
             ->setStatusCode(Response::HTTP_ACCEPTED);
@@ -109,18 +113,19 @@ class TokenApiController extends Controller
 				   'status' =>  $request->status
 				]);
 		
-		Token::where(['doctor_id'=> $request->doctor_id, 'clinic_id'=> $request->clinic_id])->where('status','<>','0')
+		Token::where(['doctor_id'=> $request->doctor_id, 'clinic_id'=> $request->clinic_id, 'timing_id'=> $request->slot_id])->where('status','<>','0')
 				->update([
 				   'estimated_time'=> DB::raw('estimated_time-10') 
 				]);
 		
 		
-		return $success;		
+		return $success;
 	}
 	
 	public function refresh_status(Request $request){
 		
-		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id])->get();
+
+		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id, 'timing_id'=>$request->slot_id])->get();
 			
 		$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'estimated_time'=>0])->first();
 		
@@ -131,5 +136,17 @@ class TokenApiController extends Controller
 		return (new TokenResource($token_arr))
             ->response()
             ->setStatusCode(Response::HTTP_ACCEPTED);
+	}
+	
+	public function check_status(Request $request)
+	{
+		$is_booked = 0;
+		
+		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id])->get();
+		
+		if(count($exist_token)){
+			$is_booked = 1;
+		}
+		return $is_booked;
 	}
 }
