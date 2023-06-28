@@ -82,12 +82,14 @@ class ClinicApiController extends Controller
 	
 	public function doctors_timing(Request $request){
 		
-		$doctors = DB::select('SELECT u.id, u.name, t.day, t.start_hour, t.end_hour
+		$doctors = DB::select('SELECT u.id, u.name, t.day, t.start_hour, t.end_hour, t.id as slot_id
 								FROM clinics c 
 								INNER JOIN clinic_user cu on c.id=cu.clinic_id 
 								INNER JOIN users u on u.id = cu.user_id 
 								INNER JOIN timings t on t.user_id = u.id 
-								WHERE c.id = ?', [$request->clinic_id]);
+								WHERE c.id = ?
+								ORDER BY t.id
+								', [$request->clinic_id]);
 		
 		return new ClinicResource($doctors);
 	}
