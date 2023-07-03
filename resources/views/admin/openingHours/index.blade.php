@@ -34,23 +34,27 @@
 										@if(empty($user->timings))
 											@foreach($day_arr as $key=>$day)
 												<div class="row mb-4 daycontainer">
-													<div class="col-md-3">
+													<div class="col-md-2">
 														{{ $day }}
 														<input type="checkbox" id="day_{{$key+1}}" name="day_{{$key+1}}" class="check_day" />
 													</div>
-													<div class="timing col-md-9">
+													<div class="timing col-md-10">
 														<div class="row">
-															<div class="col-md-4">
+															<div class="col-md-3">
 																Open at
 																<input type="time" id="" name="open_{{$key+1}}[]" min="07:00" max="23:00" />
 															</div>
-															<div class="col-md-4">
+															<div class="col-md-3">
 																Close at
 																<input type="time" id="" name="close_{{$key+1}}[]" min="07:00" max="23:00" />
 															</div>
 															<div class="col-md-2">
 																Max Token
 																<input type="number" id="" name="maxtoken_{{$key+1}}[]" min="0" />
+															</div>
+															<div class="col-md-2">
+																Time per Token
+																<input type="number" id="" name="timepertoken_{{$key+1}}[]" min="0" />
 															</div>
 															<div class="col-md-2">
 																<span class="add_row" id="add_row" data-key ="{{$key+1}}">+</span>
@@ -62,7 +66,7 @@
 										@else
 											@foreach($day_arr as $key=>$day)
 												<div class="row mb-4 daycontainer">
-													<div class="col-md-3">
+													<div class="col-md-2">
 														{{ $day }}
 														@php
 															$checked = "";
@@ -72,21 +76,25 @@
 														@endphp
 														<input type="checkbox" id="day_{{$key+1}}" name="day_{{$key+1}}" class="check_day" {{$checked}} />
 													</div>
-													<div class="timing col-md-9">
+													<div class="timing col-md-10">
 														@if(isset($user->timings[$key+1]))
 															@foreach($user->timings[$key+1] as $slot=>$timing)
 																<div class="row mt-2">
-																	<div class="col-md-4">
+																	<div class="col-md-3">
 																		Open at
 																		<input type="time" id="" name="open_{{$key+1}}[]" min="07:00" max="23:00" value="{{$timing->start_hour}}" />
 																	</div>
-																	<div class="col-md-4">
+																	<div class="col-md-3">
 																		Close at
 																		<input type="time" id="" name="close_{{$key+1}}[]" min="07:00" max="23:00" value="{{$timing->end_hour}}" />
 																	</div>
 																	<div class="col-md-2">
 																		Max Token
 																		<input type="number" id="" name="maxtoken_{{$key+1}}[]" min="0" value="{{$timing->max_token}}" />
+																	</div>
+																	<div class="col-md-2">
+																		Time per Token
+																		<input type="number" id="" name="timepertoken_{{$key+1}}[]" min="0" value="{{$timing->time_per_token}}" />
 																	</div>
 																	<div class="col-md-2">
 																		@if($slot ==0)
@@ -99,17 +107,21 @@
 															@endforeach
 														@else
 															<div class="row mt-2">
-																<div class="col-md-4">
+																<div class="col-md-3">
 																	Open at
 																	<input type="time" id="" name="open_{{$key+1}}[]" min="07:00" max="23:00" />
 																</div>
-																<div class="col-md-4">
+																<div class="col-md-3">
 																	Close at
 																	<input type="time" id="" name="close_{{$key+1}}[]" min="07:00" max="23:00" />
 																</div>
 																<div class="col-md-2">
 																	Max Token
 																	<input type="number" id="" name="maxtoken_{{$key+1}}[]" min="0" />
+																</div>
+																<div class="col-md-2">
+																	Time per Token
+																	<input type="number" id="" name="timepertoken_{{$key+1}}[]" min="0" />
 																</div>
 																<div class="col-md-2">																		
 																	<span class="add_row" id="add_row" data-key ="{{$key+1}}">+</span>
@@ -153,7 +165,7 @@
 		});
 		
 		function row_html(key){
-			return '<div class="row mt-2"><div class="col-md-4">Open at <input type="time" id="" name="open_'+key+'[]" min="07:00" max="23:00" /></div><div class="col-md-4">Close at <input type="time" id="" name="close_'+key+'[]" min="07:00" max="23:00" /></div><div class="col-md-2">Max Token<input type="number" id="" name="maxtoken_'+key+'[]" min="0" /></div><div class="col-md-2"><span class="remove_row" id="remove_row">-</span></div></div>';	
+			return '<div class="row mt-2"><div class="col-md-3">Open at <input type="time" id="" name="open_'+key+'[]" min="07:00" max="23:00" /></div><div class="col-md-3">Close at <input type="time" id="" name="close_'+key+'[]" min="07:00" max="23:00" /></div><div class="col-md-2">Max Token<input type="number" id="" name="maxtoken_'+key+'[]" min="0" /></div><div class="col-md-2">Time per Token<input type="number" id="" name="timepertoken_'+key+'[]" min="0" /></div><div class="col-md-2"><span class="remove_row" id="remove_row">-</span></div></div>';	
 		}
 		$(function() {
 			$(".check_day").each(function(){

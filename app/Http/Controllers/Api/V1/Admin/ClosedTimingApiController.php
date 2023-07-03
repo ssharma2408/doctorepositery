@@ -64,4 +64,33 @@ class ClosedTimingApiController extends Controller
 		$record = ClosedTiming::where(['user_id'=>$clinic->clinic_admin_id, 'closed_on'=>date('Y-m-d')])->get();		
 		return new ClosedTimingResource($record);		
 	}
+	
+	public function save(Request $request){
+		
+		$closed_timings = ClosedTiming::where('user_id', $request->user_id)->get();
+		if(count($closed_timings)){
+			//delete existing
+			ClosedTiming::where('user_id', $request->user_id)->delete();
+		}			
+		$data = [];
+		
+		for($j = 0; $j < count($request['closedon']); $j++){
+			if($request['closedon'][$j] != null){
+				$closedTiming = [];
+				$closedTiming['user_id'] = $request->user_id;
+				$closedTiming['closed_on'] = $request['closedon'][$j];
+				$closedTiming['deleted_at'] = null;
+				$closedTiming['created_at'] = date("Y-m-d H:i:s");
+				$closedTiming['updated_at'] = date("Y-m-d H:i:s");
+				$data[] = $closedTiming;
+			}
+		}			
+		
+		if(!empty($data)){
+			ClosedTiming::insert($data);
+		}
+		return (new TimingResource($closedTiming))
+            ->response()
+            ->setStatusCode(Response::HTTP_ACCEPTED);
+	}
 }

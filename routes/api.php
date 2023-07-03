@@ -14,6 +14,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 	Route::get('doctors/{clinic_id}', 'ClinicApiController@doctors');
 	Route::get('doctors_timing/{clinic_id}', 'ClinicApiController@doctors_timing');
 	Route::get('doctors/{clinic_id}/{doctor_id}', 'ClinicApiController@get_doctor');
+	Route::get('clinic-timings/{clinic_id}', 'ClinicApiController@get_timings');
 
     // Staff
     Route::apiResource('staffs', 'StaffApiController');
@@ -34,15 +35,17 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Closed Timing
 	Route::get('closed-timings/{user_id}', 'ClosedTimingApiController@get_closed_day');
-    Route::apiResource('closed-timings', 'ClosedTimingApiController');	
-
+    Route::apiResource('closed-timings', 'ClosedTimingApiController');
+	Route::post('closed-timings-save', 'ClosedTimingApiController@save');
+	
     // Domain
     Route::apiResource('domains', 'DomainApiController');
 
     // Patient
+	Route::get('patients/{clinic_id}/{doctor_id}', 'PatientApiController@get_patients');
     Route::apiResource('patients', 'PatientApiController');
 
-    // Patient History
+    // Patient History	
     Route::post('patient-histories/media', 'PatientHistoryApiController@storeMedia')->name('patient-histories.storeMedia');	
     Route::apiResource('patient-histories', 'PatientHistoryApiController');
 

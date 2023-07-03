@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePatientRequest;
 use App\Http\Resources\Admin\PatientResource;
 use App\Models\Patient;
 use Gate;
+use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,4 +54,16 @@ class PatientApiController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+	
+	public function get_patients(Request $request)
+	{
+		$patients = DB::select('SELECT p.id, p.name, ph.visit_date, ph.id as history_id
+								FROM patients p 
+								INNER JOIN patient_histories ph on p.id=ph.patient_id 								
+								WHERE ph.doctor_id = ?
+								ORDER BY p.id
+								', [$request->doctor_id]);
+		
+		return new PatientResource($patients);
+	}
 }
