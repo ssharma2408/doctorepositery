@@ -118,7 +118,8 @@ class OpeningHoursController extends Controller
 					$timing = [];
 					$timing['user_id'] = $request->user_id;
 					$timing['clinic_id'] = 0;
-					$timing['max_token'] = $request['maxtoken_'.$i][$j];
+					$timing['max_token'] = isset($request['maxtoken_'.$i][$j])? $request['maxtoken_'.$i][$j] : 0;
+					$timing['time_per_token'] = isset($request['timepertoken_'.$i][$j])? $request['timepertoken_'.$i][$j] : 0;
 					$timing['day'] = $i;
 					$timing['start_hour'] = $request['open_'.$i][$j];
 					$timing['end_hour'] = $request['close_'.$i][$j];

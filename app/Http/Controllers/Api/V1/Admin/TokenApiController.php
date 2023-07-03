@@ -7,6 +7,8 @@ use App\Http\Requests\StoreTokenRequest;
 use App\Http\Requests\UpdateTokenRequest;
 use App\Http\Resources\Admin\TokenResource;
 use App\Models\Token;
+use App\Models\Timing;
+use App\Models\PatientHistory;
 use Gate;
 use DB;
 use Illuminate\Http\Request;
@@ -44,9 +46,10 @@ class TokenApiController extends Controller
 			if(count($exist_token)){
 				$flag = 0;
 				$token_arr = $exist_token[0];
-			}else{				
+			}else{
+				$timing = Timing::where('id', $request->slot_id)->first();
 				$token_arr['token_number'] = $init_token['token_number'] + 1;
-				$token_arr['estimated_time'] = $init_token['estimated_time'] + 10;
+				$token_arr['estimated_time'] = $init_token['estimated_time'] + $timing->time_per_token;
 				$token_arr['timing_id'] = $request->slot_id;
 			}
 			$token_arr['current_token'] = $current_token->token_number;
@@ -108,6 +111,20 @@ class TokenApiController extends Controller
 	{
 		$success = true;
 		
+		$timing = Timing::where('id', $request->slot_id)->first();
+		
+		$time_per_token = $timing->time_per_token;
+		
+		$history_arr = [
+							'visit_date' => date("Y-m-d H:i:s"),
+							'prescription' => $request->prescription,
+							'comment' => $request->comment,
+							'patient_id' => $request->patient_id,
+							'doctor_id' => $request->doctor_id,
+						];
+		
+		PatientHistory::insert($history_arr);
+		
 		Token::where('patient_id', $request->patient_id)
 			   ->update([
 				   'status' =>  $request->status
@@ -115,7 +132,7 @@ class TokenApiController extends Controller
 		
 		Token::where(['doctor_id'=> $request->doctor_id, 'clinic_id'=> $request->clinic_id, 'timing_id'=> $request->slot_id])->where('status','<>','0')
 				->update([
-				   'estimated_time'=> DB::raw('estimated_time-10') 
+				   'estimated_time'=> DB::raw('estimated_time-'.$time_per_token)
 				]);
 		
 		

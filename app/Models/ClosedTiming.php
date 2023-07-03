@@ -6,11 +6,10 @@ use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ClosedTiming extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
 
     public $table = 'closed_timings';
 

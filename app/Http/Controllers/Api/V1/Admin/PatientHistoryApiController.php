@@ -34,7 +34,7 @@ class PatientHistoryApiController extends Controller
 
     public function show(PatientHistory $patientHistory)
     {
-        abort_if(Gate::denies('patient_history_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('patient_history_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return new PatientHistoryResource($patientHistory->load(['patient', 'doctor']));
     }
@@ -56,4 +56,6 @@ class PatientHistoryApiController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+	
+	
 }

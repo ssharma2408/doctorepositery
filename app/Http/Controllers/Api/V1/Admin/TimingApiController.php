@@ -72,7 +72,8 @@ class TimingApiController extends Controller
 					$timing['day'] = $i;
 					$timing['start_hour'] = $request['open_'.$i][$j];
 					$timing['end_hour'] = $request['close_'.$i][$j];
-					$timing['max_token'] = $request['maxtoken_'.$i][$j];
+					$timing['max_token'] = isset($request['maxtoken_'.$i][$j])? $request['maxtoken_'.$i][$j] : 0;
+					$timing['time_per_token'] = isset($request['timepertoken_'.$i][$j])? $request['timepertoken_'.$i][$j] : 0;
 					$timing['deleted_at'] = null;
 					$timing['created_at'] = date("Y-m-d H:i:s");
 					$timing['updated_at'] = date("Y-m-d H:i:s");

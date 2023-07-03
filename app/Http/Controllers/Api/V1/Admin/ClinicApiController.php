@@ -94,4 +94,14 @@ class ClinicApiController extends Controller
 		return new ClinicResource($doctors);
 	}
 	
+	public function get_timings(Request $request){		
+		
+		$clinic = Clinic::where('id', $request->clinic_id)->first();
+		$timings = Timing::where('user_id', $clinic->clinic_admin->id)->orderBy('start_hour')->get();		
+
+		$final_arr = array('opening_hours'=>$timings, 'clinic_user'=>$clinic->clinic_admin->id);
+
+		return new ClinicResource($final_arr);
+	}
+	
 }
