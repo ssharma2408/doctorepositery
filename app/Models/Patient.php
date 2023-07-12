@@ -23,6 +23,8 @@ class Patient extends Model
     protected $fillable = [
         'name',
         'mobile_number',
+        'gender',
+        'dob',
         'clinic_id',
         'created_at',
         'updated_at',
