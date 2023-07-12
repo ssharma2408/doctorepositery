@@ -28,7 +28,8 @@ class RegisterController extends BaseController
     {        
 		$validator = Validator::make($request->all(), [
             'name' => 'required',
-            'mobile_number' => 'required'            
+            'mobile_number' => 'required',
+            'gender' => 'required',
         ]);
 		
         if($validator->fails()){
@@ -41,6 +42,8 @@ class RegisterController extends BaseController
         $patient = Patient::create($input);
         $success['token'] =  $patient->createToken('MyApp')->plainTextToken;
         $success['name'] =  $patient->name;
+		$success['role'] =  'Patient';
+		$success['id'] =  $patient->id;
    
         return $this->sendResponse($success, 'Patient register successfully.');
     }

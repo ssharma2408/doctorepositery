@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateClosedTimingRequest;
 use App\Http\Resources\Admin\ClosedTimingResource;
 use App\Models\ClosedTiming;
 use App\Models\Clinic;
+use App\Models\Timing;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,9 +61,21 @@ class ClosedTimingApiController extends Controller
 	}
 	
 	public function check_closed($clinic_id){		
+
+		$is_clinic_closed = false;
+
 		$clinic = Clinic::find($clinic_id);
-		$record = ClosedTiming::where(['user_id'=>$clinic->clinic_admin_id, 'closed_on'=>date('Y-m-d')])->get();		
-		return new ClosedTimingResource($record);		
+		$record = ClosedTiming::where(['user_id'=>$clinic->clinic_admin_id, 'closed_on'=>date('Y-m-d')])->get();
+		
+		$timing = Timing::where(['user_id'=>$clinic->clinic_admin_id, 'day'=>date( 'N' )])->get();
+		
+		if(count($record) || ! count($timing)){
+			$is_clinic_closed = true;
+		}
+		$status = ["is_clinic_closed"=>$is_clinic_closed];
+		
+		return new ClosedTimingResource($status);
+				
 	}
 	
 	public function save(Request $request){
