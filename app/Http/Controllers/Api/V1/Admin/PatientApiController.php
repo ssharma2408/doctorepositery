@@ -7,6 +7,7 @@ use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
 use App\Http\Resources\Admin\PatientResource;
 use App\Models\Patient;
+use App\Models\Dependent;
 use Gate;
 use DB;
 use Illuminate\Http\Request;
@@ -65,5 +66,24 @@ class PatientApiController extends Controller
 								', [$request->doctor_id]);
 		
 		return new PatientResource($patients);
+	}
+	
+	public function get_members(Request $request)
+	{
+		$members = Patient::where('family_id', $request->family_id)->get();
+		
+		return new PatientResource($members);
+	}
+	
+	public function add_member(Request $request)
+	{
+		if(isset($request->mobile_number)){
+			$member = Patient::create($request->all());			
+		}else{
+			$member = Dependent::create($request->all());
+		}
+		return (new PatientResource($member))
+				->response()
+				->setStatusCode(Response::HTTP_CREATED);
 	}
 }

@@ -12,10 +12,12 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\PatientOtp;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Family;
 use Validator;
 use Illuminate\Http\JsonResponse;
 
 use Hash;
+use DB;
 
 class RegisterController extends BaseController
 {
@@ -35,8 +37,11 @@ class RegisterController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+		$family_id = Family::create()->id;		
    
         $input = $request->all();
+		
+		$input['family_id'] = $family_id;
 		
         //$input['password'] = bcrypt($input['password']);
         $patient = Patient::create($input);
@@ -44,6 +49,7 @@ class RegisterController extends BaseController
         $success['name'] =  $patient->name;
 		$success['role'] =  'Patient';
 		$success['id'] =  $patient->id;
+		$success['family_id'] =  $patient->family_id;
    
         return $this->sendResponse($success, 'Patient register successfully.');
     }

@@ -43,6 +43,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Patient
 	Route::get('patients/{clinic_id}/{doctor_id}', 'PatientApiController@get_patients');
+	Route::get('patient_family/{family_id}', 'PatientApiController@get_members');
+	Route::post('patient_family', 'PatientApiController@add_member');
     Route::apiResource('patients', 'PatientApiController');
 
     // Patient History	
