@@ -7,6 +7,7 @@ use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
 use App\Http\Resources\Admin\PatientResource;
 use App\Models\Patient;
+use App\Models\Dependent;
 use Gate;
 use DB;
 use Illuminate\Http\Request;
@@ -21,13 +22,17 @@ class PatientApiController extends Controller
         return new PatientResource(Patient::with(['clinic'])->get());
     }
 
-    public function store(StorePatientRequest $request)
+    public function store(Request $request)
     {
-        $patient = Patient::create($request->all());
+        if(isset($request->mobile_number)){
+			$member = Patient::create($request->all());			
+		}else{
+			$member = Dependent::create($request->all());
+		}
 
-        return (new PatientResource($patient))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+		return (new PatientResource($member))
+				->response()
+				->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function show(Patient $patient)
@@ -39,7 +44,8 @@ class PatientApiController extends Controller
 
     public function update(UpdatePatientRequest $request, Patient $patient)
     {
-        $patient->update($request->all());
+        
+		$patient->update($request->all());
 
         return (new PatientResource($patient))
             ->response()
@@ -65,5 +71,54 @@ class PatientApiController extends Controller
 								', [$request->doctor_id]);
 		
 		return new PatientResource($patients);
+	}
+	
+	public function get_members(Request $request)
+	{
+		$independent = Patient::where('family_id', $request->family_id)->get();
+		
+		$dependent = Dependent::where('family_id', $request->family_id)->get();		
+		
+		$members = ["type_1"=>$independent, "type_2"=>$dependent];
+		
+		return new PatientResource($members);
+	}
+
+	public function get_member(Request $request)
+	{
+		$member = $request->type == 1 ? Patient::where('id', $request->member_id)->get() : Dependent::where('id', $request->member_id)->get();
+		
+		return new PatientResource($member);
+	}	
+
+	public function update_member(Request $request)
+	{
+		if(isset($request->mobile_number)){			
+			DB::table('patients')
+				->where('id', $request->id)
+				->limit(1)
+				->update($request->all());
+		}else{
+			DB::table('dependent')
+				->where('id', $request->id)
+				->limit(1)
+				->update($request->all());
+		}
+
+		return (new PatientResource(array("success"=>true)))
+            ->response()
+            ->setStatusCode(Response::HTTP_ACCEPTED);
+	}
+	
+	public function remove_member(Request $request)
+	{
+
+		if($request->type == 1){
+			Patient::destroy($request->member_id);
+		}else{
+			Dependent::destroy($request->member_id);
+		}
+
+		return response(null, Response::HTTP_NO_CONTENT);
 	}
 }
