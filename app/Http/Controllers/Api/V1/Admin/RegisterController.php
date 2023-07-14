@@ -192,7 +192,8 @@ class RegisterController extends BaseController
         /* Create a New OTP */
         return PatientOtp::create([
             'patient_id' => $patient->id,
-            'otp' => rand(123456, 999999),
+            //'otp' => rand(123456, 999999),
+            'otp' => '123456',
             'expire_at' => $now->addMinutes(10)
         ]);
     }
