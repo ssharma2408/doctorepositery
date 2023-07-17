@@ -218,9 +218,10 @@ class RegisterController extends BaseController
         if (!$patientOtp) {
             
 			return $this->sendError('error', ['error'=>'Your OTP is not correct']);
-        }else if($patientOtp && $now->isAfter($patientOtp->expire_at)){            
-			return $this->sendError('error', ['error'=>'Your OTP has been expired']);
         }
+		/* else if($patientOtp && $now->isAfter($patientOtp->expire_at)){            
+			return $this->sendError('error', ['error'=>'Your OTP has been expired']);
+        } */
     
         $patient = Patient::whereId($request->patient_id)->first();
   
