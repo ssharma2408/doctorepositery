@@ -157,13 +157,10 @@ class TokenApiController extends Controller
 	
 	public function check_status(Request $request)
 	{
-		$is_booked = 0;
-		
 		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id])->get();
 		
-		if(count($exist_token)){
-			$is_booked = 1;
-		}
-		return $is_booked;
+		return (new TokenResource($exist_token))
+            ->response()
+            ->setStatusCode(Response::HTTP_ACCEPTED);
 	}
 }
