@@ -7,27 +7,33 @@ use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
 use App\Http\Resources\Admin\PatientResource;
 use App\Models\Patient;
-use App\Models\Dependent;
+use App\Models\ShortLink;
+use App\Models\FamilyLog;
+use Exception;
+use Twilio\Rest\Client;
 use Gate;
 use DB;
+use Str;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PatientApiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        abort_if(Gate::denies('patient_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return new PatientResource(Patient::with(['clinic'])->get());
+        $members = Patient::where('family_id', $request->family_id)->get();
+		
+		return new PatientResource($members);       
     }
 
     public function store(Request $request)
     {
         if(isset($request->mobile_number)){
-			$member = Patient::create($request->all());			
-		}else{
-			$member = Dependent::create($request->all());
+			$member = Patient::create($request->all());
+		}else{			
+			$patient_detail = $request->all();
+			$patient_detail['mobile_number'] = $request->user_mobile_number."-".rand(pow(10, 3-1), pow(10, 3)-1);
+			$member = Patient::create($patient_detail);
 		}
 
 		return (new PatientResource($member))
@@ -37,9 +43,7 @@ class PatientApiController extends Controller
 
     public function show(Patient $patient)
     {
-        abort_if(Gate::denies('patient_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return new PatientResource($patient->load(['clinic']));
+        return new PatientResource($patient);
     }
 
     public function update(UpdatePatientRequest $request, Patient $patient)
@@ -54,8 +58,6 @@ class PatientApiController extends Controller
 
     public function destroy(Patient $patient)
     {
-        abort_if(Gate::denies('patient_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         $patient->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
@@ -72,53 +74,90 @@ class PatientApiController extends Controller
 		
 		return new PatientResource($patients);
 	}
-	
-	public function get_members(Request $request)
-	{
-		$independent = Patient::where('family_id', $request->family_id)->get();
-		
-		$dependent = Dependent::where('family_id', $request->family_id)->get();		
-		
-		$members = ["type_1"=>$independent, "type_2"=>$dependent];
-		
-		return new PatientResource($members);
-	}
 
-	public function get_member(Request $request)
+	public function sendsms(Request $request)
 	{
-		$member = $request->type == 1 ? Patient::where('id', $request->member_id)->get() : Dependent::where('id', $request->member_id)->get();
+		$patient = Patient::where('mobile_number', $request->mobile_number)->first();
 		
-		return new PatientResource($member);
-	}	
-
-	public function update_member(Request $request)
-	{
-		if(isset($request->mobile_number)){			
-			DB::table('patients')
-				->where('id', $request->id)
-				->limit(1)
-				->update($request->all());
+		$url = "f_id=".$request->family_id."&p_id=".$patient->id;
+		
+		$input['link'] = $url;
+        $input['code'] = Str::random(6);
+   
+        $short_link = $request->site_url.'c/'.ShortLink::create($input)->code;
+		
+		$message = $request->user_name."(".$request->user_mobile_number.") wants to add you in his family. Cick on ".$short_link." to accept invitation.";
+		
+		$patient = new Patient();
+		
+		$status = $patient->sendSMS($request->mobile_number, $message); 
+		
+		if($status){
+			return new PatientResource(["status"=>1, "message"=>$message]);
 		}else{
-			DB::table('dependent')
-				->where('id', $request->id)
-				->limit(1)
-				->update($request->all());
+			return new PatientResource(["status"=>0]);
 		}
-
-		return (new PatientResource(array("success"=>true)))
-            ->response()
-            ->setStatusCode(Response::HTTP_ACCEPTED);
+		
+		/* try {
+  
+            $account_sid = env("TWILIO_SID");
+            $auth_token = env("TWILIO_TOKEN");
+            $twilio_number = env("TWILIO_FROM");			
+  
+            $client = new Client($account_sid, $auth_token);
+            $client->messages->create($request->mobile_number, [
+                'from' => $twilio_number, 
+                'body' => $message]);
+   
+            info('SMS Sent Successfully.');
+			return new PatientResource(["status"=>1, "message"=>$message]);
+    
+        } catch (Exception $e) {
+            info("Error: ". $e->getMessage());
+			return new PatientResource(["status"=>0]);
+        } */
 	}
 	
-	public function remove_member(Request $request)
-	{
+		/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function change_family($code)
+    {
+        $find = ShortLink::where('code', $code)->first();
+		
+		if(!empty($find)){
+   
+			$details = explode("&", $find->link);
+			
+			$new_family_id = explode("=", $details[0])[1];
+			$patient_id = explode("=", $details[1])[1];
+			
+			$patient = Patient::where('id', $patient_id)->first();
+			
+			$old_family_id = $patient->family_id;			
+			
+			if($new_family_id != $old_family_id){
+				$change_log = [];
+				$change_log['patient_id'] = $patient_id;
+				$change_log['old_family_id'] = $old_family_id;
+				$change_log['new_family_id'] = $new_family_id;
+				
+				FamilyLog::create($change_log);
+				
+				Patient::where('id', $patient_id)
+				   ->update([
+					   'family_id' =>  $new_family_id
+					]);
+				
+				return new PatientResource(["status"=>1]);
+				
+			}else{
+				return new PatientResource(["status"=>0]);
+			}	
+			
+		}		
+    }
 
-		if($request->type == 1){
-			Patient::destroy($request->member_id);
-		}else{
-			Dependent::destroy($request->member_id);
-		}
-
-		return response(null, Response::HTTP_NO_CONTENT);
-	}
 }
