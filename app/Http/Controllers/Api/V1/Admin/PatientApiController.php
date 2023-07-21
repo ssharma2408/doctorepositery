@@ -110,11 +110,11 @@ class PatientApiController extends Controller
 		
 		$status = $patient->sendSMS($request->mobile_number, $message); 
 		
-		if($status){
+		//if($status){
 			return new PatientResource(["status"=>1, "message"=>$message]);
-		}else{
+		/* }else{
 			return new PatientResource(["status"=>0]);
-		}
+		} */
 		
 		/* try {
   
