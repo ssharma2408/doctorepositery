@@ -4,6 +4,10 @@ Route::controller(Api\V1\Admin\ClosedTimingApiController::class)->group(function
 	Route::get('clinic-close-status/{clinic_id}', 'check_closed');
 });
 
+Route::controller(Api\V1\Admin\PatientApiController::class)->group(function(){
+	Route::get('code/{code}', 'change_family');
+});
+
 Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
 	// Package
     Route::apiResource('packages', 'PackageApiController');
@@ -43,11 +47,14 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Patient
 	Route::get('patients/{clinic_id}/{doctor_id}', 'PatientApiController@get_patients');
-	Route::get('patient_family/{family_id}', 'PatientApiController@get_members');
-	Route::get('get_member/{family_id}/{member_id}/{type}', 'PatientApiController@get_member'); 	
-	Route::post('update_member', 'PatientApiController@update_member');
-	Route::get('remove_member/{family_id}/{member_id}/{type}', 'PatientApiController@remove_member');
+	Route::get('patient_family/{family_id}', 'PatientApiController@index');
+	Route::post('sendsms', 'PatientApiController@sendsms');
     Route::apiResource('patients', 'PatientApiController');
+	
+/* 	Route::get('generate-shorten-link', 'ShortLinkController@index');
+	Route::post('generate-shorten-link', 'ShortLinkController@store')->name('generate.shorten.link.post');
+	   
+	Route::get('{code}', 'ShortLinkController@shortenLink')->name('shorten.link'); */
 
     // Patient History	
     Route::post('patient-histories/media', 'PatientHistoryApiController@storeMedia')->name('patient-histories.storeMedia');	
