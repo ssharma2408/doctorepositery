@@ -58,9 +58,27 @@ class PatientApiController extends Controller
 
     public function destroy(Patient $patient)
     {
-        $patient->delete();
+        $history = FamilyLog::where('patient_id', $patient->id)->orderBy('id', 'DESC')->first();
+		
+		if(!empty($history)){
+			$change_log = [];
+			$change_log['patient_id'] = $patient->id;
+			$change_log['old_family_id'] = $history->new_family_id;
+			$change_log['new_family_id'] = $history->old_family_id;
+			
+			FamilyLog::create($change_log);
+			
+			Patient::where('id', $patient->id)
+			   ->update([
+				   'family_id' =>  $history->old_family_id
+				]);
+			return new PatientResource(["status"=>1]);
+		}else{
+			$patient->delete();
+			return response(null, Response::HTTP_NO_CONTENT);
+		}		
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        
     }
 	
 	public function get_patients(Request $request)
