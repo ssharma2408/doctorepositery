@@ -157,7 +157,7 @@ class TokenApiController extends Controller
 	
 	public function check_status(Request $request)
 	{
-		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id])->get();
+		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'timing_id'=>$request->slot_id, 'patient_id'=>$request->patient_id])->get();
 		
 		return (new TokenResource($exist_token))
             ->response()
