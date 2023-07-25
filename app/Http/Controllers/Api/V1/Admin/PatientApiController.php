@@ -72,6 +72,35 @@ class PatientApiController extends Controller
 			   ->update([
 				   'family_id' =>  $history->old_family_id
 				]);
+			if( ! $patient->is_dependent){
+				$dependents = Patient::where('added_by', $patient->id)->get();
+				if(!empty($dependents)){
+					
+					$data = [];
+					$memmer_ids = [];
+					
+					foreach($dependents as $dependent){
+						$change_log = [];
+						$change_log['patient_id'] = $dependent->id;
+						$change_log['old_family_id'] = $history->new_family_id;
+						$change_log['new_family_id'] = $history->old_family_id;
+						
+						$data[] = $change_log;
+					
+						$memmer_ids[] = $dependent->id;
+					}
+					
+					if(!empty($data)){
+						FamilyLog::insert($data);
+					}
+					
+					Patient::whereIn('id', $memmer_ids)
+						   ->update([
+							   'family_id' =>  $history->old_family_id
+							]);
+					
+				}
+			}
 			return new PatientResource(["status"=>1]);
 		}else{
 			$patient->delete();
@@ -154,14 +183,20 @@ class PatientApiController extends Controller
 			
 			$patient = Patient::where('id', $patient_id)->first();
 			
-			$old_family_id = $patient->family_id;			
+			$old_family_id = $patient->family_id;
 			
 			if($new_family_id != $old_family_id){
+				
+				$members = Patient::where(['family_id' => $old_family_id, 'is_dependent' => 1])->get();
+				
+				$data = [];
+				$memmer_ids = [];
+				
 				$change_log = [];
 				$change_log['patient_id'] = $patient_id;
 				$change_log['old_family_id'] = $old_family_id;
 				$change_log['new_family_id'] = $new_family_id;
-				
+					
 				FamilyLog::create($change_log);
 				
 				Patient::where('id', $patient_id)
@@ -169,6 +204,27 @@ class PatientApiController extends Controller
 					   'family_id' =>  $new_family_id
 					]);
 				
+				foreach($members as $member){
+				
+					$change_log = [];
+					$change_log['patient_id'] = $member->id;
+					$change_log['old_family_id'] = $old_family_id;
+					$change_log['new_family_id'] = $new_family_id;
+					
+					$data[] = $change_log;
+					
+					$memmer_ids[] = $member->id;
+				}
+				
+				if(!empty($data)){
+					FamilyLog::insert($data);
+				}
+				
+				Patient::whereIn('id', $memmer_ids)
+					   ->update([
+						   'family_id' =>  $new_family_id
+						]);
+						
 				return new PatientResource(["status"=>1]);
 				
 			}else{
