@@ -150,6 +150,8 @@ class TokenApiController extends Controller
 		
 		$token_arr['current_token'] = $current_token->token_number;
 		
+		$token_arr['estimated_time'] = intdiv($token_arr['estimated_time'], 60).':'. ($token_arr['estimated_time'] % 60);
+		
 		return (new TokenResource($token_arr))
             ->response()
             ->setStatusCode(Response::HTTP_ACCEPTED);
@@ -158,7 +160,9 @@ class TokenApiController extends Controller
 	public function check_status(Request $request)
 	{
 		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'timing_id'=>$request->slot_id, 'patient_id'=>$request->patient_id])->get();
-		
+
+		$exist_token['estimated_time'] = intdiv($exist_token['estimated_time'], 60).':'. ($exist_token['estimated_time'] % 60);
+
 		return (new TokenResource($exist_token))
             ->response()
             ->setStatusCode(Response::HTTP_ACCEPTED);
