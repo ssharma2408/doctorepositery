@@ -29,6 +29,7 @@ class Patient extends Model
         'gender',
         'dob',
         'is_dependent',
+        'added_by',
         'clinic_id',
         'family_id',
         'created_at',
