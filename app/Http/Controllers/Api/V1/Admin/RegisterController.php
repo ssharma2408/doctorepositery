@@ -42,6 +42,7 @@ class RegisterController extends BaseController
         $input = $request->all();
 		
 		$input['family_id'] = $family_id;
+		$input['added_by'] = 0;
 		
         //$input['password'] = bcrypt($input['password']);
         $patient = Patient::create($input);
