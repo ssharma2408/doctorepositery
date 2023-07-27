@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('patients', function (Blueprint $table) {
-            $table->unsignedBigInteger('added_by');
+        Schema::table('family', function (Blueprint $table) {
+            $table->unsignedBigInteger('owner_id');
+            $table->longText('address');
         });
     }
 
@@ -21,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('patients', function (Blueprint $table) {
-            $table->dropColumn('added_by');
+        Schema::table('family', function (Blueprint $table) {
+            $table->dropColumn('owner_id');
+            $table->dropColumn('address');
         });
     }
 };

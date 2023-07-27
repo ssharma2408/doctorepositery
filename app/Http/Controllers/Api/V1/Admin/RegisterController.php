@@ -46,6 +46,12 @@ class RegisterController extends BaseController
 		
         //$input['password'] = bcrypt($input['password']);
         $patient = Patient::create($input);
+		
+		Family::where('id', $family_id)
+			   ->update([
+				   'owner_id' =>  $patient->id
+				]);
+		
         $success['token'] =  $patient->createToken('MyApp')->plainTextToken;
         $success['name'] =  $patient->name;
 		$success['role'] =  'Patient';

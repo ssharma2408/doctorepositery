@@ -9,6 +9,7 @@ use App\Http\Resources\Admin\PatientResource;
 use App\Models\Patient;
 use App\Models\ShortLink;
 use App\Models\FamilyLog;
+use App\Models\Family;
 use Exception;
 use Twilio\Rest\Client;
 use Gate;
@@ -22,8 +23,9 @@ class PatientApiController extends Controller
     public function index(Request $request)
     {
         $members = Patient::where('family_id', $request->family_id)->get();
+		$owner_id = Family::where('id', $request->family_id)->first()->owner_id;
 		
-		return new PatientResource($members);       
+		return new PatientResource(['members'=>$members, 'owner_id'=> $owner_id]);       
     }
 
     public function store(Request $request)
