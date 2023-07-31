@@ -17,6 +17,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('clinics', 'ClinicApiController');		
 	Route::get('doctors/{clinic_id}', 'ClinicApiController@doctors');
 	Route::get('doctors_timing/{clinic_id}', 'ClinicApiController@doctors_timing');
+	Route::get('token_status/{clinic_id}', 'ClinicApiController@token_status');
 	Route::get('doctors/{clinic_id}/{doctor_id}', 'ClinicApiController@get_doctor');
 	Route::get('clinic-timings/{clinic_id}', 'ClinicApiController@get_timings');
 
@@ -65,7 +66,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 	Route::get('check_status/{clinic_id}/{doctor_id}/{slot_id}/{patient_id}', 'TokenApiController@check_status');
 	Route::get('refresh_status/{clinic_id}/{doctor_id}/{slot_id}/{patient_id}', 'TokenApiController@refresh_status');
 	Route::post('update_token', 'TokenApiController@update_token');
+	Route::post('create_token', 'TokenApiController@create_token');
     Route::apiResource('tokens', 'TokenApiController');
+	Route::get('refresh_token/{slot_id}', 'TokenApiController@refresh_token');
 	
 });
 

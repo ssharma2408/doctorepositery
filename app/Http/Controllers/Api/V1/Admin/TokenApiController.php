@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateTokenRequest;
 use App\Http\Resources\Admin\TokenResource;
 use App\Models\Token;
 use App\Models\Timing;
+use App\Models\Patient;
+use App\Models\Family;
 use App\Models\PatientHistory;
 use Gate;
 use DB;
@@ -166,5 +168,70 @@ class TokenApiController extends Controller
 		return (new TokenResource($exist_token))
             ->response()
             ->setStatusCode(Response::HTTP_ACCEPTED);
+	}
+	
+	public function refresh_token($slot_id)
+	{
+
+		$token = Token::where(['timing_id'=>$slot_id])->orderBy('id', 'DESC')->first();	
+		
+		return (new TokenResource($token))
+            ->response()
+            ->setStatusCode(Response::HTTP_ACCEPTED);
+	}
+	
+	public function create_token(Request $request){
+		
+		$patient  = Patient::where('mobile_number', $request->mobile_number)->first();
+		
+		if(empty($patient)){
+			$family_id = Family::create()->id;
+			$patient_arr = [];
+			$token_arr = [];			
+			
+			$patient_arr['family_id'] = $family_id;
+			$patient_arr['added_by'] = 0;
+			$patient_arr['name'] = $request->name;
+			$patient_arr['mobile_number'] = $request->mobile_number;
+			$patient_arr['gender'] = $request->gender;
+			$patient_arr['dob'] = $request->dob;
+			$patient_arr['clinic_id'] = $request->clinic_id;
+			
+			$patient_id = Patient::create($patient_arr)->id;
+			
+		}else{
+			$patient_id = $patient->id;
+		}
+		
+		$token = Token::where(['patient_id'=>$patient_id, 'timing_id'=>$request->slot_id])->first();
+		
+		if(empty($token)){
+		
+			$current_token = Token::where(['timing_id'=>$request->slot_id])->orderBy('id', 'DESC')->first();
+				
+			if(empty($current_token)){
+				$token_arr['token_number'] = 1;
+				$token_arr['estimated_time'] = 0;
+			
+			}else{
+				$time_per_token = Timing::where('id', $request->slot_id)->first()->time_per_token;				
+				
+				$token_arr['token_number'] = $current_token->token_number + 1;
+				$token_arr['estimated_time'] = $current_token->estimated_time + $time_per_token;
+			}
+
+			$token_arr['clinic_id'] = $request->clinic_id;
+			$token_arr['doctor_id'] = $request->doctor_id;
+			$token_arr['patient_id'] = $patient_id;
+			$token_arr['status'] = 1;
+			$token_arr['timing_id'] = $request->slot_id;
+			
+			$token = Token::create($token_arr);			
+			
+		}
+		return (new TokenResource($token))
+				->response()
+				->setStatusCode(Response::HTTP_ACCEPTED);
+		
 	}
 }

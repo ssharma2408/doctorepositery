@@ -37,7 +37,7 @@ class RegisterController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-		$family_id = Family::create()->id;		
+		$family_id = Family::create()->id;
    
         $input = $request->all();
 		
