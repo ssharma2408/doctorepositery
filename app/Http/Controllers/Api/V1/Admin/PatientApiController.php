@@ -103,7 +103,7 @@ class PatientApiController extends Controller
 					
 				}
 			}
-			return new PatientResource(["status"=>1]);
+			return new PatientResource(["family_id"=>$history->old_family_id]);
 		}else{
 			$patient->delete();
 			return response(null, Response::HTTP_NO_CONTENT);

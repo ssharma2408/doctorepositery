@@ -97,11 +97,27 @@ class ClinicApiController extends Controller
 	public function get_timings(Request $request){		
 		
 		$clinic = Clinic::where('id', $request->clinic_id)->first();
-		$timings = Timing::where('user_id', $clinic->clinic_admin->id)->orderBy('start_hour')->get();		
+		$timings = Timing::where('user_id', $clinic->clinic_admin->id)->orderBy('start_hour')->get();
 
 		$final_arr = array('opening_hours'=>$timings, 'clinic_user'=>$clinic->clinic_admin->id);
 
 		return new ClinicResource($final_arr);
+	}
+	
+	public function token_status(Request $request){
+		$doctors = DB::select('SELECT u.id, u.name, t.day, t.start_hour, t.end_hour, t.id as slot_id, (SELECT token_number FROM tokens WHERE timing_id = slot_id ORDER BY id DESC LIMIT 1) as current_token
+								FROM clinics c 
+								INNER JOIN clinic_user cu on c.id=cu.clinic_id 
+								INNER JOIN users u on u.id = cu.user_id 
+								INNER JOIN timings t on t.user_id = u.id 
+								LEFT JOIN tokens tk on tk.timing_id = t.id
+								WHERE c.id = ?
+								AND t.day = ?
+								GROUP BY t.id
+								ORDER BY t.id
+								', [$request->clinic_id, date( 'N' )]);
+		
+		return new ClinicResource($doctors);
 	}
 	
 }
