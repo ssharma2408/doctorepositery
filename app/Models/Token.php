@@ -30,6 +30,8 @@ class Token extends Model
         'deleted_at',
         'status',
         'timing_id',		
+        'is_online',		
+        'mobile_number',		
     ];
 
     protected function serializeDate(DateTimeInterface $date)

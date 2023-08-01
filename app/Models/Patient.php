@@ -32,6 +32,8 @@ class Patient extends Model
         'added_by',
         'clinic_id',
         'family_id',
+        'is_online',
+        'mobile_number',
         'created_at',
         'updated_at',
         'deleted_at',

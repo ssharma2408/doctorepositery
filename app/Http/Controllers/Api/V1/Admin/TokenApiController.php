@@ -38,7 +38,9 @@ class TokenApiController extends Controller
 			$token_arr['token_number'] = 1;
 			$token_arr['estimated_time'] = 00.00;
 			$token_arr['current_token'] = 1;
-			$token_arr['timing_id'] = $request->slot_id;			
+			$token_arr['timing_id'] = $request->slot_id;
+			$token_arr['is_online'] = 1;
+			$token_arr['mobile_number'] = "";
 		}else{
 			//check patient already has token
 			$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id, 'timing_id'=>$request->slot_id])->get();
@@ -53,6 +55,8 @@ class TokenApiController extends Controller
 				$token_arr['token_number'] = $init_token['token_number'] + 1;
 				$token_arr['estimated_time'] = $init_token['estimated_time'] + $timing->time_per_token;
 				$token_arr['timing_id'] = $request->slot_id;
+				$token_arr['is_online'] = 1;
+				$token_arr['mobile_number'] = "";
 			}
 			$token_arr['current_token'] = $current_token->token_number;
 		}	
@@ -96,9 +100,9 @@ class TokenApiController extends Controller
 	
 	public function get_patients(Request $request)
 	{
-		$patients = DB::select('SELECT p.id, p.name, t.token_number, t.status, t.timing_id, tim.start_hour, tim.end_hour
-								FROM patients p 
-								INNER JOIN tokens t on p.id=t.patient_id
+		$patients = DB::select('SELECT p.id, p.name, t.token_number, t.status, t.timing_id, tim.start_hour, tim.end_hour, t.is_online, t.id as token_id
+								FROM tokens t 
+								LEFT JOIN patients p ON p.id=t.patient_id
 								INNER JOIN timings tim on tim.id=t.timing_id								
                                 WHERE t.status <> 0
 								AND t.clinic_id = ?
@@ -113,29 +117,36 @@ class TokenApiController extends Controller
 	{
 		$success = true;
 		
-		$timing = Timing::where('id', $request->slot_id)->first();
-		
-		$time_per_token = $timing->time_per_token;
-		
-		$history_arr = [
-							'visit_date' => date("Y-m-d H:i:s"),
-							'prescription' => $request->prescription,
-							'comment' => $request->comment,
-							'patient_id' => $request->patient_id,
-							'doctor_id' => $request->doctor_id,
-						];
-		
-		PatientHistory::insert($history_arr);
-		
-		Token::where('patient_id', $request->patient_id)
-			   ->update([
-				   'status' =>  $request->status
-				]);
-		
-		Token::where(['doctor_id'=> $request->doctor_id, 'clinic_id'=> $request->clinic_id, 'timing_id'=> $request->slot_id])->where('status','<>','0')
-				->update([
-				   'estimated_time'=> DB::raw('estimated_time-'.$time_per_token)
-				]);
+		if(!$request->status){
+			$timing = Timing::where('id', $request->slot_id)->first();
+			
+			$time_per_token = $timing->time_per_token;
+			
+			if($request->is_online){
+				$history_arr = [
+									'visit_date' => date("Y-m-d H:i:s"),
+									'prescription' => $request->prescription,
+									'comment' => $request->comment,
+									'patient_id' => $request->patient_id,
+									'doctor_id' => $request->doctor_id,
+								];
+				
+				PatientHistory::insert($history_arr);
+				$type = 'patient_id';
+			}else{
+				$type = 'id';
+			}
+			
+			Token::where($type, $request->patient_id)
+				   ->update([
+					   'status' =>  $request->status
+					]);
+			
+			Token::where(['doctor_id'=> $request->doctor_id, 'clinic_id'=> $request->clinic_id, 'timing_id'=> $request->slot_id])->where('status','<>','0')
+					->update([
+					   'estimated_time'=> DB::raw('estimated_time-'.$time_per_token)
+					]);
+		}
 		
 		
 		return $success;
@@ -185,53 +196,51 @@ class TokenApiController extends Controller
 		$patient  = Patient::where('mobile_number', $request->mobile_number)->first();
 		
 		if(empty($patient)){
-			$family_id = Family::create()->id;
-			$patient_arr = [];
-			$token_arr = [];			
 			
-			$patient_arr['family_id'] = $family_id;
-			$patient_arr['added_by'] = 0;
-			$patient_arr['name'] = $request->name;
-			$patient_arr['mobile_number'] = $request->mobile_number;
-			$patient_arr['gender'] = $request->gender;
-			$patient_arr['dob'] = $request->dob;
-			$patient_arr['clinic_id'] = $request->clinic_id;
+			$token_arr = [];		
+
+			$token = Token::where(['mobile_number'=>$request->mobile_number, 'timing_id'=>$request->slot_id])->first();
+
+			if(empty($token)){
 			
-			$patient_id = Patient::create($patient_arr)->id;
+				$current_token = Token::where(['timing_id'=>$request->slot_id])->orderBy('id', 'DESC')->first();
+					
+				if(empty($current_token)){
+					$token_arr['token_number'] = 1;
+					$token_arr['estimated_time'] = 0;				
+				
+				}else{
+					$time_per_token = Timing::where('id', $request->slot_id)->first()->time_per_token;				
+					
+					$token_arr['token_number'] = $current_token->token_number + 1;
+					$token_arr['estimated_time'] = $current_token->estimated_time + $time_per_token;
+				}
+
+				$token_arr['clinic_id'] = $request->clinic_id;
+				$token_arr['doctor_id'] = $request->doctor_id;
+				$token_arr['patient_id'] = 0;
+				$token_arr['status'] = 1;
+				$token_arr['timing_id'] = $request->slot_id;
+				$token_arr['is_online'] = 0;
+				$token_arr['mobile_number'] = $request->mobile_number;
+
+				$token = Token::create($token_arr);
+				
+				return (new TokenResource($token))
+					->response()
+					->setStatusCode(Response::HTTP_ACCEPTED);
+				
+			}else{
+				return (new TokenResource(['msg'=> 'Token already created.']))
+					->response()
+					->setStatusCode(Response::HTTP_ACCEPTED);
+			}
 			
 		}else{
-			$patient_id = $patient->id;
+			return (new TokenResource(['msg'=> 'Patient already has account.']))
+					->response()
+					->setStatusCode(Response::HTTP_ACCEPTED);
 		}
-		
-		$token = Token::where(['patient_id'=>$patient_id, 'timing_id'=>$request->slot_id])->first();
-		
-		if(empty($token)){
-		
-			$current_token = Token::where(['timing_id'=>$request->slot_id])->orderBy('id', 'DESC')->first();
-				
-			if(empty($current_token)){
-				$token_arr['token_number'] = 1;
-				$token_arr['estimated_time'] = 0;
-			
-			}else{
-				$time_per_token = Timing::where('id', $request->slot_id)->first()->time_per_token;				
-				
-				$token_arr['token_number'] = $current_token->token_number + 1;
-				$token_arr['estimated_time'] = $current_token->estimated_time + $time_per_token;
-			}
-
-			$token_arr['clinic_id'] = $request->clinic_id;
-			$token_arr['doctor_id'] = $request->doctor_id;
-			$token_arr['patient_id'] = $patient_id;
-			$token_arr['status'] = 1;
-			$token_arr['timing_id'] = $request->slot_id;
-			
-			$token = Token::create($token_arr);			
-			
-		}
-		return (new TokenResource($token))
-				->response()
-				->setStatusCode(Response::HTTP_ACCEPTED);
 		
 	}
 }
