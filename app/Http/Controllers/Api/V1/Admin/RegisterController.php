@@ -57,6 +57,7 @@ class RegisterController extends BaseController
 		$success['role'] =  'Patient';
 		$success['id'] =  $patient->id;
 		$success['family_id'] =  $patient->family_id;
+		$success['mobile_number'] =  $patient->mobile_number;
    
         return $this->sendResponse($success, 'Patient register successfully.');
     }
