@@ -340,6 +340,26 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 83,
+                'title' => 'announcement_create',
+            ],
+            [
+                'id'    => 84,
+                'title' => 'announcement_edit',
+            ],
+            [
+                'id'    => 85,
+                'title' => 'announcement_show',
+            ],
+            [
+                'id'    => 86,
+                'title' => 'announcement_delete',
+            ],
+            [
+                'id'    => 87,
+                'title' => 'announcement_access',
+            ],
+            [
+                'id'    => 88,
                 'title' => 'profile_password_edit',
             ],
         ];
