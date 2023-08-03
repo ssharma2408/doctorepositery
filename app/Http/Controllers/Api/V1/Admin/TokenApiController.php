@@ -117,21 +117,23 @@ class TokenApiController extends Controller
 	{
 		$success = true;
 		
-		if(!$request->status){
+		if($request->status == 0 || $request->status == 2){
 			$timing = Timing::where('id', $request->slot_id)->first();
 			
 			$time_per_token = $timing->time_per_token;
 			
 			if($request->is_online){
-				$history_arr = [
-									'visit_date' => date("Y-m-d H:i:s"),
-									'prescription' => $request->prescription,
-									'comment' => $request->comment,
-									'patient_id' => $request->patient_id,
-									'doctor_id' => $request->doctor_id,
-								];
-				
-				PatientHistory::insert($history_arr);
+				if($request->status == 0){
+					$history_arr = [
+										'visit_date' => date("Y-m-d H:i:s"),
+										'prescription' => $request->prescription,
+										'comment' => $request->comment,
+										'patient_id' => $request->patient_id,
+										'doctor_id' => $request->doctor_id,
+									];
+					
+					PatientHistory::insert($history_arr);
+				}
 				$type = 'patient_id';
 			}else{
 				$type = 'id';
@@ -142,7 +144,7 @@ class TokenApiController extends Controller
 					   'status' =>  $request->status
 					]);
 			
-			Token::where(['doctor_id'=> $request->doctor_id, 'clinic_id'=> $request->clinic_id, 'timing_id'=> $request->slot_id])->where('status','<>','0')
+			Token::where(['doctor_id'=> $request->doctor_id, 'clinic_id'=> $request->clinic_id, 'timing_id'=> $request->slot_id])->where('estimated_time', '>', 0)->whereIn('status',[1,2])
 					->update([
 					   'estimated_time'=> DB::raw('estimated_time-'.$time_per_token)
 					]);

@@ -8,6 +8,14 @@ Route::controller(Api\V1\Admin\PatientApiController::class)->group(function(){
 	Route::get('code/{code}', 'change_family');
 });
 
+Route::controller(Api\V1\Admin\ClinicApiController::class)->group(function(){
+	Route::get('token_status/{clinic_id}', 'token_status');
+});
+
+Route::controller(Api\V1\Admin\AnnouncementApiController::class)->group(function(){
+	Route::get('announcements/{clinic_id}', 'announcements');
+});
+
 Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
 	// Package
     Route::apiResource('packages', 'PackageApiController');
@@ -16,7 +24,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::post('clinics/media', 'ClinicApiController@storeMedia')->name('clinics.storeMedia');
     Route::apiResource('clinics', 'ClinicApiController');		
 	Route::get('doctors/{clinic_id}', 'ClinicApiController@doctors');
-	Route::get('doctors_timing/{clinic_id}', 'ClinicApiController@doctors_timing');
+	Route::get('doctors_timing/{clinic_id}', 'ClinicApiController@doctors_timing');	
 	Route::get('token_status/{clinic_id}', 'ClinicApiController@token_status');
 	Route::get('doctors/{clinic_id}/{doctor_id}', 'ClinicApiController@get_doctor');
 	Route::get('clinic-timings/{clinic_id}', 'ClinicApiController@get_timings');

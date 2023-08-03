@@ -128,7 +128,7 @@
             </li>
         @endcan
         @can('content_management_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/content-categories*") ? "c-show" : "" }} {{ request()->is("admin/content-tags*") ? "c-show" : "" }} {{ request()->is("admin/content-pages*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/content-categories*") ? "c-show" : "" }} {{ request()->is("admin/content-tags*") ? "c-show" : "" }} {{ request()->is("admin/content-pages*") ? "c-show" : "" }} {{ request()->is("admin/announcements*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-book c-sidebar-nav-icon">
 
@@ -163,6 +163,16 @@
 
                                 </i>
                                 {{ trans('cruds.contentPage.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('announcement_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.announcements.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/announcements") || request()->is("admin/announcements/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.announcement.title') }}
                             </a>
                         </li>
                     @endcan

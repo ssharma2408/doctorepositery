@@ -343,5 +343,25 @@ return [
         'title'          => 'Opening Hours UI',
         'title_singular' => 'Opening Hours UI',
     ],
+    'announcement' => [
+        'title'          => 'Announcements',
+        'title_singular' => 'Announcement',
+        'fields'         => [
+            'id'                => 'ID',
+            'id_helper'         => ' ',
+            'message'           => 'Message',
+            'message_helper'    => ' ',
+            'clinic'            => 'Clinic',
+            'clinic_helper'     => ' ',
+            'created_at'        => 'Created at',
+            'created_at_helper' => ' ',
+            'updated_at'        => 'Updated at',
+            'updated_at_helper' => ' ',
+            'deleted_at'        => 'Deleted at',
+            'deleted_at_helper' => ' ',
+            'status'            => 'Status',
+            'status_helper'     => ' ',
+        ],
+    ],
 
 ];

@@ -85,6 +85,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('opening-hours/destroy', 'OpeningHoursController@massDestroy')->name('opening-hours.massDestroy');
     Route::resource('opening-hours', 'OpeningHoursController');
 	Route::post('opening-hours-save', 'OpeningHoursController@save')->name('opening.hours.save');
+	
+	// Announcements
+    Route::delete('announcements/destroy', 'AnnouncementsController@massDestroy')->name('announcements.massDestroy');
+    Route::post('announcements/media', 'AnnouncementsController@storeMedia')->name('announcements.storeMedia');
+    Route::post('announcements/ckmedia', 'AnnouncementsController@storeCKEditorImages')->name('announcements.storeCKEditorImages');
+    Route::resource('announcements', 'AnnouncementsController');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
