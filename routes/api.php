@@ -78,6 +78,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('tokens', 'TokenApiController');
 	Route::get('refresh_token/{slot_id}', 'TokenApiController@refresh_token');
 	
+	//Pages
+	Route::get('pages/{clinic_id}', 'ContentPageApiController@index');
+	
 });
 
 Route::controller(Api\V1\Admin\RegisterController::class)->group(function(){

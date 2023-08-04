@@ -159,11 +159,11 @@ class TokenApiController extends Controller
 
 		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id, 'timing_id'=>$request->slot_id])->get();
 			
-		$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'estimated_time'=>0])->first();
+		$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'estimated_time'=>0, 'status'=>1])->orderBy('id', 'ASC')->first();
 		
 		$token_arr = $exist_token[0];
 		
-		$token_arr['current_token'] = $current_token->token_number;
+		$token_arr['current_token'] = empty($current_token->token_number) ? "" : $current_token->token_number;
 		
 		$token_arr['estimated_time'] = intdiv($token_arr['estimated_time'], 60).':'. ($token_arr['estimated_time'] % 60);
 		
@@ -197,11 +197,15 @@ class TokenApiController extends Controller
 		
 		$patient  = Patient::where('mobile_number', $request->mobile_number)->first();
 		
-		if(empty($patient)){
+		if(empty($patient) || isset($request->member)){
 			
 			$token_arr = [];		
 
-			$token = Token::where(['mobile_number'=>$request->mobile_number, 'timing_id'=>$request->slot_id])->first();
+			if(isset($request->member)){
+				$token = Token::where(['patient_id'=>$request->member, 'timing_id'=>$request->slot_id])->first();
+			}else{
+				$token = Token::where(['mobile_number'=>$request->mobile_number, 'timing_id'=>$request->slot_id])->first();
+			}
 
 			if(empty($token)){
 			
@@ -220,11 +224,11 @@ class TokenApiController extends Controller
 
 				$token_arr['clinic_id'] = $request->clinic_id;
 				$token_arr['doctor_id'] = $request->doctor_id;
-				$token_arr['patient_id'] = 0;
+				$token_arr['patient_id'] = isset($request->member) ? $request->member : 0;
 				$token_arr['status'] = 1;
 				$token_arr['timing_id'] = $request->slot_id;
-				$token_arr['is_online'] = 0;
-				$token_arr['mobile_number'] = $request->mobile_number;
+				$token_arr['is_online'] = isset($request->member) ? 1 : 0;
+				$token_arr['mobile_number'] = isset($request->member) ? "" : $request->mobile_number;
 
 				$token = Token::create($token_arr);
 				
@@ -233,13 +237,16 @@ class TokenApiController extends Controller
 					->setStatusCode(Response::HTTP_ACCEPTED);
 				
 			}else{
-				return (new TokenResource(['msg'=> 'Token already created.']))
+				return (new TokenResource(['msg'=> 'processed']))
 					->response()
 					->setStatusCode(Response::HTTP_ACCEPTED);
 			}
 			
 		}else{
-			return (new TokenResource(['msg'=> 'Patient already has account.']))
+			
+			$patients = Patient::where('family_id', $patient->family_id)->get();
+			
+			return (new TokenResource(['msg'=> 'Patient already has account.', 'members'=>$patients]))
 					->response()
 					->setStatusCode(Response::HTTP_ACCEPTED);
 		}
