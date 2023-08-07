@@ -16,11 +16,11 @@ class ContentPageApiController extends Controller
 {
     use MediaUploadingTrait;
 
-    public function index()
+    public function index($clinic_id)
     {
-        abort_if(Gate::denies('content_page_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('content_page_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new ContentPageResource(ContentPage::with(['categories', 'tags', 'clinic'])->get());
+        return new ContentPageResource(ContentPage::where(['clinic_id'=>$clinic_id, 'deleted_at'=>NULL])->with(['categories', 'tags', 'clinic'])->get());
     }
 
     public function store(StoreContentPageRequest $request)
