@@ -120,4 +120,25 @@ class ClinicApiController extends Controller
 		return new ClinicResource($doctors);
 	}
 	
+	public function profile($id)
+	{
+		return new ClinicResource(User::where('id', $id)->first());
+	}
+	
+	public function update_profile(Request $request)
+	{
+		$update_arr = [
+					   'name' =>  $request->name,
+					   'email' =>  $request->email,
+					   'mobile_number' =>  $request->mobile_number,					   
+					];
+		if(isset($request->password)){
+			$update_arr['password'] = $request->password;
+		}
+		
+		User::where('id', $request->id)
+				   ->update($update_arr);
+		return true;
+	}
+
 }

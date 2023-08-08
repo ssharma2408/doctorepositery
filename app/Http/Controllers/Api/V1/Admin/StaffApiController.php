@@ -53,4 +53,25 @@ class StaffApiController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+	
+	public function profile($id)
+	{
+		return new StaffResource(Staff::where('id', $id)->first());
+	}
+	
+	public function update_profile(Request $request)
+	{
+		$update_arr = [
+					   'name' =>  $request->name,
+					   'email' =>  $request->email,
+					   'mobile_number' =>  $request->mobile_number,					   
+					];
+		if(isset($request->password)){
+			$update_arr['password'] = $request->password;
+		}
+		
+		Staff::where('id', $request->id)
+				   ->update($update_arr);
+		return true;
+	}
 }
