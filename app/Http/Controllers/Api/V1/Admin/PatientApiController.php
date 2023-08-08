@@ -235,5 +235,45 @@ class PatientApiController extends Controller
 			
 		}		
     }
-
+	
+	public function search_patients($clinic_id, $doc_id, $search_term)
+	{
+		
+		$condition = "";
+		
+		if($search_term != 'all'){
+			$condition = 'AND (p.name LIKE "%'.$search_term.'%" OR p.mobile_number LIKE "%'.$search_term.'%")';
+		}
+		
+		
+		$patients = DB::select('SELECT p.id, p.name, p.mobile_number, ph.visit_date, ph.id as history_id
+								FROM patients p 
+								INNER JOIN patient_histories ph ON p.id=ph.patient_id
+								WHERE p.clinic_id = ? 
+								AND ph.doctor_id =? 
+								'.$condition.'
+								ORDER BY p.id;
+								', [$clinic_id, $doc_id]);
+		
+		return new PatientResource($patients);				
+	}
+	
+	public function profile($id)
+	{
+		return new PatientResource(Patient::where('id', $id)->first());
+	}
+	
+	public function update_profile(Request $request)
+	{
+		$update_arr = [
+					   'name' =>  $request->name,
+					   'gender' =>  $request->gender,
+					   'mobile_number' =>  $request->mobile_number,					   
+					   'dob' =>  $request->dob,					   
+					];		
+		
+		Patient::where('id', $request->id)
+				   ->update($update_arr);
+		return true;
+	}
 }

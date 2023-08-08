@@ -28,9 +28,13 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 	Route::get('token_status/{clinic_id}', 'ClinicApiController@token_status');
 	Route::get('doctors/{clinic_id}/{doctor_id}', 'ClinicApiController@get_doctor');
 	Route::get('clinic-timings/{clinic_id}', 'ClinicApiController@get_timings');
+	Route::get('profile/{user_id}', 'ClinicApiController@profile');
+	Route::post('update_profile', 'ClinicApiController@update_profile');
 
     // Staff
     Route::apiResource('staffs', 'StaffApiController');
+	Route::get('staff_profile/{user_id}', 'StaffApiController@profile');
+	Route::post('staff_update_profile', 'StaffApiController@update_profile');
 
     // Content Category
     Route::apiResource('content-categories', 'ContentCategoryApiController');
@@ -56,9 +60,12 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Patient
 	Route::get('patients/{clinic_id}/{doctor_id}', 'PatientApiController@get_patients');
+	Route::get('search_patients/{clinic_id}/{doctor_id}/{search_term}', 'PatientApiController@search_patients');
 	Route::get('patient_family/{family_id}', 'PatientApiController@index');
 	Route::post('sendsms', 'PatientApiController@sendsms');
     Route::apiResource('patients', 'PatientApiController');
+	Route::get('patient_profile/{user_id}', 'PatientApiController@profile');
+	Route::post('patient_update_profile', 'PatientApiController@update_profile');
 	
 /* 	Route::get('generate-shorten-link', 'ShortLinkController@index');
 	Route::post('generate-shorten-link', 'ShortLinkController@store')->name('generate.shorten.link.post');

@@ -137,6 +137,7 @@ class RegisterController extends BaseController
 					$success['name'] =  $staff->name;
 					$success['username'] =  $staff->username;
 					$success['role'] =  'Staff';
+					$success['user_id'] =  $staff->id;
 					return $this->sendResponse($success, 'User login successfully.');
 				}else{
 					return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this doamin']);
