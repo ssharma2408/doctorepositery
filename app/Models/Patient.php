@@ -29,8 +29,7 @@ class Patient extends Model
         'gender',
         'dob',
         'is_dependent',
-        'added_by',
-        'clinic_id',
+        'added_by',        
         'family_id',       
         'created_at',
         'updated_at',
@@ -42,9 +41,9 @@ class Patient extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function clinic()
+    public function clinics()
     {
-        return $this->belongsTo(Clinic::class, 'clinic_id');
+        return $this->belongsToMany(Clinic::class);
     }
 	
 	/**

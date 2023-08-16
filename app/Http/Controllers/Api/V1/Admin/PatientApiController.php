@@ -38,6 +38,8 @@ class PatientApiController extends Controller
 			$member = Patient::create($patient_detail);
 		}
 
+		$member->clinics()->sync($request->clinic_id);
+
 		return (new PatientResource($member))
 				->response()
 				->setStatusCode(Response::HTTP_CREATED);
@@ -106,6 +108,7 @@ class PatientApiController extends Controller
 			return new PatientResource(["family_id"=>$history->old_family_id]);
 		}else{
 			$patient->delete();
+
 			return response(null, Response::HTTP_NO_CONTENT);
 		}		
 

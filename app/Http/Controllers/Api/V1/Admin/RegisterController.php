@@ -51,7 +51,7 @@ class RegisterController extends BaseController
 			   ->update([
 				   'owner_id' =>  $patient->id
 				]);
-		
+		$patient->clinics()->sync($input['clinic_id']);
         $success['token'] =  $patient->createToken('MyApp')->plainTextToken;
         $success['name'] =  $patient->name;
 		$success['role'] =  'Patient';
@@ -170,10 +170,13 @@ class RegisterController extends BaseController
 		
         /* Generate An OTP */
         $patientOtp = $this->generateOtp($request->clinic_id, $request->mobile_number);
-        $patientOtp->sendSMS($request->mobile_number);  
-        
-		return $this->sendResponse(['patient_id' => $patientOtp->patient_id], 'OTP has been sent on Your Mobile Number.');
 		
+		if(isset($patientOtp->otp)){
+			$patientOtp->sendSMS($request->mobile_number);        
+			return $this->sendResponse(['patient_id' => $patientOtp->patient_id], 'OTP has been sent on Your Mobile Number.');
+		}else{
+			return $this->sendResponse([], 'You are not authorised for this clinic');
+		}		
 	}
 	
 	 /**
@@ -183,9 +186,15 @@ class RegisterController extends BaseController
      */
     public function generateOtp($clinic_id, $mobile_no)
     {
-        $patient = Patient::where('mobile_number', $mobile_no)->first();
-		
-		if($patient->clinic_id != $clinic_id){
+        $patient = Patient::where('mobile_number', $mobile_no)->with('clinics')->first();	
+
+		$clinic_arr = [];
+
+		foreach($patient->clinics as $clinics){
+			$clinic_arr[] = $clinics->id;
+		}
+
+		if(! in_array($clinic_id, $clinic_arr)){
 			return $this->sendError('Authorisation error', ['error'=>'You are not authorised for this clinic']);
 		}
   
