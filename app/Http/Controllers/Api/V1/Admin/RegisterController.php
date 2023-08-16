@@ -37,28 +37,52 @@ class RegisterController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-		$family_id = Family::create()->id;
-   
-        $input = $request->all();
 		
-		$input['family_id'] = $family_id;
-		$input['added_by'] = 0;
+		$exist_patient = Patient::where('mobile_number', $request->mobile_number)->with('clinics')->first();
+
+		$input = $request->all();
+
+		if(empty($exist_patient)){
 		
-        //$input['password'] = bcrypt($input['password']);
-        $patient = Patient::create($input);
-		
-		Family::where('id', $family_id)
-			   ->update([
-				   'owner_id' =>  $patient->id
-				]);
-		$patient->clinics()->sync($input['clinic_id']);
-        $success['token'] =  $patient->createToken('MyApp')->plainTextToken;
-        $success['name'] =  $patient->name;
-		$success['role'] =  'Patient';
-		$success['id'] =  $patient->id;
-		$success['family_id'] =  $patient->family_id;
-		$success['mobile_number'] =  $patient->mobile_number;
-   
+			$family_id = Family::create()->id;
+			$input['family_id'] = $family_id;
+			$input['added_by'] = 0;
+			
+			//$input['password'] = bcrypt($input['password']);
+			$patient = Patient::create($input);
+			
+			Family::where('id', $family_id)
+				   ->update([
+					   'owner_id' =>  $patient->id
+					]);
+			$patient->clinics()->sync($input['clinic_id']);
+
+			$success['token'] =  $patient->createToken('MyApp')->plainTextToken;
+			$success['name'] =  $patient->name;
+			$success['role'] =  'Patient';
+			$success['id'] =  $patient->id;
+			$success['family_id'] =  $patient->family_id;
+			$success['mobile_number'] =  $patient->mobile_number;
+		}else{
+			
+			$clinic_arr = [];
+			$clinics = $exist_patient->clinics;
+
+			foreach($clinics as $clinic){
+				$clinic_arr[] = $clinic->id;
+			}
+			$success['token'] =  $exist_patient->createToken('MyApp')->plainTextToken;
+			$success['name'] =  $exist_patient->name;
+			$success['role'] =  'Patient';
+			$success['id'] =  $exist_patient->id;
+			$success['family_id'] =  $exist_patient->family_id;
+			$success['mobile_number'] =  $exist_patient->mobile_number;
+			
+			if(!in_array($input['clinic_id'], $clinic_arr)){
+				$exist_patient->clinics()->sync($input['clinic_id']);
+			}			
+		}
+
         return $this->sendResponse($success, 'Patient register successfully.');
     }
    
@@ -167,7 +191,7 @@ class RegisterController extends BaseController
 		$request->validate([
             'mobile_number' => 'required|exists:patients,mobile_number'
         ]);
-		
+
         /* Generate An OTP */
         $patientOtp = $this->generateOtp($request->clinic_id, $request->mobile_number);
 		
