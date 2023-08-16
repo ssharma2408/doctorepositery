@@ -78,8 +78,13 @@ class RegisterController extends BaseController
 			$success['family_id'] =  $exist_patient->family_id;
 			$success['mobile_number'] =  $exist_patient->mobile_number;
 			
-			if(!in_array($input['clinic_id'], $clinic_arr)){
-				$exist_patient->clinics()->sync($input['clinic_id']);
+			if(!in_array($input['clinic_id'], $clinic_arr)){				
+				DB::table('clinic_patient')->insert(
+					 array(
+							'clinic_id'     =>   $input['clinic_id'], 
+							'patient_id'   =>   $exist_patient->id
+					 )
+				);
 			}			
 		}
 
