@@ -252,7 +252,8 @@ class PatientApiController extends Controller
 		$patients = DB::select('SELECT p.id, p.name, p.mobile_number, ph.visit_date, ph.id as history_id
 								FROM patients p 
 								INNER JOIN patient_histories ph ON p.id=ph.patient_id
-								WHERE p.clinic_id = ? 
+								INNER JOIN clinic_patient cp ON p.id=cp.patient_id
+								WHERE cp.clinic_id = ? 
 								AND ph.doctor_id =? 
 								'.$condition.'
 								ORDER BY p.id;

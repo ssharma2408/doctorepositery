@@ -67,7 +67,10 @@ class TokenApiController extends Controller
 		}else{
 			$token = $token_arr;
 		}		
-        
+		$timing_start = Timing::where('id', $request->slot_id)->first();
+
+		$token['current_token'] = (!$timing_start->is_started) ? "Not Started" : $token['current_token'];
+
 		return (new TokenResource($token))
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
@@ -100,7 +103,7 @@ class TokenApiController extends Controller
 	
 	public function get_patients(Request $request)
 	{
-		$patients = DB::select('SELECT p.id, p.name, t.token_number, t.status, t.timing_id, tim.start_hour, tim.end_hour, t.is_online, t.id as token_id
+		$patients = DB::select('SELECT p.id, p.name, t.token_number, t.status, t.timing_id, tim.start_hour, tim.end_hour, t.is_online, t.id as token_id, tim.is_started
 								FROM tokens t 
 								LEFT JOIN patients p ON p.id=t.patient_id
 								INNER JOIN timings tim on tim.id=t.timing_id								
@@ -163,7 +166,9 @@ class TokenApiController extends Controller
 		
 		$token_arr = $exist_token[0];
 		
-		$token_arr['current_token'] = empty($current_token->token_number) ? "" : $current_token->token_number;
+		$timing_start = Timing::where('id', $request->slot_id)->first();		
+		
+		$token_arr['current_token'] = (!$timing_start->is_started) ? "Not Started" : $current_token->token_number;
 		
 		$token_arr['estimated_time'] = intdiv($token_arr['estimated_time'], 60).':'. ($token_arr['estimated_time'] % 60);
 		
@@ -251,5 +256,14 @@ class TokenApiController extends Controller
 					->setStatusCode(Response::HTTP_ACCEPTED);
 		}
 		
+	}
+	
+	public function work_status($slot_id, $status)
+	{
+		Timing::where('id', $slot_id)
+				   ->update([
+					   'is_started' =>  $status
+					]);
+		return true;
 	}
 }
