@@ -133,6 +133,7 @@ class TokenApiController extends Controller
 										'comment' => $request->comment,
 										'patient_id' => $request->patient_id,
 										'doctor_id' => $request->doctor_id,
+										'next_visit_date' => (!empty($request->next_visit_date)) ? $request->next_visit_date : null,
 									];
 					
 					PatientHistory::insert($history_arr);
