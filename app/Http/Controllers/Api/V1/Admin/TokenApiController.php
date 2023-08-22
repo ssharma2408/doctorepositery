@@ -162,7 +162,7 @@ class TokenApiController extends Controller
 						"UPDATE tokens SET estimated_time =
 						(
 							CASE
-								WHEN ( (estimated_time".$operator.ceil(($time_per_token / 60) % 60).") > ".$timing->time_per_token."))
+								WHEN ( (estimated_time".$operator.ceil(($time_per_token / 60) % 60).") > ".$timing->time_per_token.")
 								THEN estimated_time".$operator.ceil(($time_per_token / 60) % 60)."
 								ELSE 0
 							END
