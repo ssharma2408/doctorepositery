@@ -123,8 +123,17 @@ class TokenApiController extends Controller
 		if($request->status == 0 || $request->status == 2){
 			$timing = Timing::where('id', $request->slot_id)->first();
 			
-			$time_per_token = $timing->time_per_token;
+			$time_per_token = $timing->time_per_token * 60;			
 			
+			$operator = "-";
+			
+			// Update estimated time based on Actual time taken for Patient
+			if($time_per_token >= $request->time_taken){
+				$time_per_token = $time_per_token + ($time_per_token - $request->time_taken);				
+			}else{
+				$time_per_token = $time_per_token - ($request->time_taken - $time_per_token);
+			}
+
 			if($request->is_online){
 				if($request->status == 0){
 					$history_arr = [
@@ -147,11 +156,23 @@ class TokenApiController extends Controller
 				   ->update([
 					   'status' =>  $request->status
 					]);
-			
-			Token::where(['doctor_id'=> $request->doctor_id, 'clinic_id'=> $request->clinic_id, 'timing_id'=> $request->slot_id])->where('estimated_time', '>', 0)->whereIn('status',[1,2])
-					->update([
-					   'estimated_time'=> DB::raw('estimated_time-'.$time_per_token)
-					]);
+
+			DB::statement(
+						
+						"UPDATE tokens SET estimated_time =
+						(
+							CASE
+								WHEN (((estimated_time".$operator.ceil(($time_per_token / 60) % 60).") > 0) AND ((estimated_time".$operator.ceil(($time_per_token / 60) % 60).") > ".$timing->time_per_token."))
+								THEN estimated_time".$operator.ceil(($time_per_token / 60) % 60)."
+								ELSE 0
+							END
+						)
+						WHERE doctor_id=".$request->doctor_id."
+						AND clinic_id=".$request->clinic_id."
+						AND timing_id=".$request->slot_id."
+						AND estimated_time > 0
+						AND status IN (1,2)"							
+			);
 		}
 		
 		
