@@ -126,12 +126,14 @@ class TokenApiController extends Controller
 			$time_per_token = $timing->time_per_token * 60;			
 			
 			$operator = "-";
+			$flag = 0;
 			
 			// Update estimated time based on Actual time taken for Patient
 			if($time_per_token >= $request->time_taken){
 				$time_per_token = $time_per_token + ($time_per_token - $request->time_taken);				
 			}else{
 				$time_per_token = $time_per_token - ($request->time_taken - $time_per_token);
+				$flag = 1;
 			}
 
 			if($request->is_online){
@@ -152,17 +154,23 @@ class TokenApiController extends Controller
 				$type = 'id';
 			}
 			
+			if($flag){
+				$condition = "estimated_time".$operator.ceil(($time_per_token / 60) % 60)." > ".$timing->time_per_token."";
+			}else{
+				$condition = "estimated_time".$operator.ceil(($time_per_token / 60) % 60)." > 0";
+			}
+
 			Token::where($type, $request->patient_id)
 				   ->update([
 					   'status' =>  $request->status
 					]);
 
 			DB::statement(
-						
+
 						"UPDATE tokens SET estimated_time =
 						(
 							CASE
-								WHEN ( (estimated_time".$operator.ceil(($time_per_token / 60) % 60).") > ".$timing->time_per_token.")
+								WHEN $condition
 								THEN estimated_time".$operator.ceil(($time_per_token / 60) % 60)."
 								ELSE 0
 							END
