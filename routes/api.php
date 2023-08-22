@@ -49,6 +49,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Timing
     Route::apiResource('timings', 'TimingApiController');
 	Route::post('timings-save', 'TimingApiController@save');
+	
 
     // Closed Timing
 	Route::get('closed-timings/{user_id}', 'ClosedTimingApiController@get_closed_day');
@@ -84,6 +85,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 	Route::post('create_token', 'TokenApiController@create_token');
     Route::apiResource('tokens', 'TokenApiController');
 	Route::get('refresh_token/{slot_id}', 'TokenApiController@refresh_token');
+	Route::get('work_status/{slot_id}/{status}', 'TokenApiController@work_status');
 	
 	//Pages
 	Route::get('pages/{clinic_id}', 'ContentPageApiController@index');
