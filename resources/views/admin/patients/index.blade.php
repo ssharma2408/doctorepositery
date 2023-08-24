@@ -31,9 +31,9 @@
                         <th>
                             {{ trans('cruds.patient.fields.mobile_number') }}
                         </th>
-                        <th>
+                        <!--th>
                             {{ trans('cruds.patient.fields.clinic') }}
-                        </th>
+                        </th-->
                         <th>
                             &nbsp;
                         </th>
@@ -54,9 +54,9 @@
                             <td>
                                 {{ $patient->mobile_number ?? '' }}
                             </td>
-                            <td>
+                            <!--td>
                                 {{ $patient->clinic->name ?? '' }}
-                            </td>
+                            </td-->
                             <td>
                                 @can('patient_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.patients.show', $patient->id) }}">
