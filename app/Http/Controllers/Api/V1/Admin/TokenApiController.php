@@ -160,18 +160,20 @@ class TokenApiController extends Controller
 					   'status' =>  $request->status
 					]);
 
-			DB::statement(
+			if($request->status == 0){
 
-						"UPDATE tokens SET estimated_time =	estimated_time".$operator.$time_per_token."
-						WHERE doctor_id=".$request->doctor_id."
-						AND clinic_id=".$request->clinic_id."
-						AND timing_id=".$request->slot_id."
-						AND estimated_time > 0
-						AND status IN (1,2)"							
-			);
+				DB::statement(
+
+							"UPDATE tokens SET estimated_time =	estimated_time".$operator.$time_per_token."
+							WHERE doctor_id=".$request->doctor_id."
+							AND clinic_id=".$request->clinic_id."
+							AND timing_id=".$request->slot_id."
+							AND estimated_time > 0
+							AND status IN (1,2)"							
+				);
+			}
 		}
-		
-		
+
 		return $success;
 	}
 	
