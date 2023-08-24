@@ -13,6 +13,8 @@ use App\Models\Family;
 use App\Models\PatientHistory;
 use Gate;
 use DB;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,7 +47,7 @@ class TokenApiController extends Controller
 			//check patient already has token
 			$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id, 'timing_id'=>$request->slot_id])->get();
 			
-			$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'timing_id'=>$request->slot_id, 'estimated_time'=>0])->first();
+			$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'timing_id'=>$request->slot_id, 'status'=>1])->orderBy('id', 'ASC')->first();
 			
 			if(count($exist_token)){
 				$flag = 0;
@@ -53,7 +55,7 @@ class TokenApiController extends Controller
 			}else{
 				$timing = Timing::where('id', $request->slot_id)->first();
 				$token_arr['token_number'] = $init_token['token_number'] + 1;
-				$token_arr['estimated_time'] = $init_token['estimated_time'] + $timing->time_per_token;
+				$token_arr['estimated_time'] = ($timing->is_started) ? ($init_token['estimated_time'] + ($timing->time_per_token * 60)) : ($init_token['estimated_time'] + $timing->time_per_token);
 				$token_arr['timing_id'] = $request->slot_id;
 				$token_arr['is_online'] = 1;
 				$token_arr['mobile_number'] = "";
@@ -125,15 +127,14 @@ class TokenApiController extends Controller
 			
 			$time_per_token = $timing->time_per_token * 60;			
 			
-			$operator = "-";
-			$flag = 0;
 			
 			// Update estimated time based on Actual time taken for Patient
 			if($time_per_token >= $request->time_taken){
-				$time_per_token = $time_per_token + ($time_per_token - $request->time_taken);				
+				$time_per_token = $time_per_token - $request->time_taken;
+				$operator = "-";
 			}else{
-				$time_per_token = $time_per_token - ($request->time_taken - $time_per_token);
-				$flag = 1;
+				$time_per_token = $request->time_taken - $time_per_token;
+				$operator = "+";
 			}
 
 			if($request->is_online){
@@ -153,12 +154,6 @@ class TokenApiController extends Controller
 			}else{
 				$type = 'id';
 			}
-			
-			if($flag){
-				$condition = "estimated_time".$operator.ceil(($time_per_token / 60) % 60)." > ".$timing->time_per_token."";
-			}else{
-				$condition = "estimated_time".$operator.ceil(($time_per_token / 60) % 60)." > 0";
-			}
 
 			Token::where($type, $request->patient_id)
 				   ->update([
@@ -167,14 +162,7 @@ class TokenApiController extends Controller
 
 			DB::statement(
 
-						"UPDATE tokens SET estimated_time =
-						(
-							CASE
-								WHEN $condition
-								THEN estimated_time".$operator.ceil(($time_per_token / 60) % 60)."
-								ELSE 0
-							END
-						)
+						"UPDATE tokens SET estimated_time =	estimated_time".$operator.$time_per_token."
 						WHERE doctor_id=".$request->doctor_id."
 						AND clinic_id=".$request->clinic_id."
 						AND timing_id=".$request->slot_id."
@@ -192,15 +180,13 @@ class TokenApiController extends Controller
 
 		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'patient_id'=>$request->patient_id, 'timing_id'=>$request->slot_id])->get();
 			
-		$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'estimated_time'=>0, 'status'=>1])->orderBy('id', 'ASC')->first();
+		$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'status'=>1])->orderBy('id', 'ASC')->first();
 		
 		$token_arr = $exist_token[0];
 		
 		$timing_start = Timing::where('id', $request->slot_id)->first();		
 		
-		$token_arr['current_token'] = (!$timing_start->is_started) ? "Not Started" : $current_token->token_number;
-		
-		$token_arr['estimated_time'] = intdiv($token_arr['estimated_time'], 60).':'. ($token_arr['estimated_time'] % 60);
+		$token_arr['current_token'] = (!$timing_start->is_started) ? "Not Started" : $current_token->token_number;		
 		
 		return (new TokenResource($token_arr))
             ->response()
@@ -210,8 +196,6 @@ class TokenApiController extends Controller
 	public function check_status(Request $request)
 	{
 		$exist_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'timing_id'=>$request->slot_id, 'patient_id'=>$request->patient_id])->get();
-
-		$exist_token['estimated_time'] = intdiv($exist_token['estimated_time'], 60).':'. ($exist_token['estimated_time'] % 60);
 
 		return (new TokenResource($exist_token))
             ->response()
@@ -248,13 +232,13 @@ class TokenApiController extends Controller
 					
 				if(empty($current_token)){
 					$token_arr['token_number'] = 1;
-					$token_arr['estimated_time'] = 0;				
+					$token_arr['estimated_time'] = 0;
 				
 				}else{
-					$time_per_token = Timing::where('id', $request->slot_id)->first()->time_per_token;				
+					$time_per_token = Timing::where('id', $request->slot_id)->first();
 					
 					$token_arr['token_number'] = $current_token->token_number + 1;
-					$token_arr['estimated_time'] = $current_token->estimated_time + $time_per_token;
+					$token_arr['estimated_time'] = ($time_per_token->is_started) ? ($current_token->estimated_time + ($time_per_token->time_per_token * 60)) : ($current_token->estimated_time + $time_per_token->time_per_token);
 				}
 
 				$token_arr['clinic_id'] = $request->clinic_id;
@@ -288,12 +272,32 @@ class TokenApiController extends Controller
 		
 	}
 	
-	public function work_status($slot_id, $status)
+	public function work_status($slot_id, $status, $time)
 	{
+		$upsert_arr = [];
+
 		Timing::where('id', $slot_id)
 				   ->update([
 					   'is_started' =>  $status
 					]);
+		$timing = Timing::where('id', $slot_id)->first();
+
+		$tokens = Token::where('timing_id', $slot_id)->orderBy('token_number', 'ASC')->get();
+
+		if(!empty($tokens)){
+			$i = 0;
+			foreach($tokens as $token){
+
+				$calc_time = $time + (60 * $i);
+
+				$upsert_arr[] = array('id' => $token->id, 'estimated_time' => $calc_time);
+
+				$i = $i + $timing->time_per_token;
+			}
+
+			Token::query()->upsert($upsert_arr, 'id');			
+		}
+
 		return true;
 	}
 }
