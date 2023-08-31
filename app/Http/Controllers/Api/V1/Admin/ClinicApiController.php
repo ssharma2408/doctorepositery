@@ -105,7 +105,7 @@ class ClinicApiController extends Controller
 	}
 	
 	public function token_status(Request $request){
-		$doctors = DB::select('SELECT u.id, u.name, t.day, t.start_hour, t.end_hour, t.id as slot_id, (SELECT token_number FROM tokens WHERE timing_id = slot_id ORDER BY id DESC LIMIT 1) as total_token, (SELECT token_number FROM tokens WHERE timing_id = slot_id AND estimated_time = 0 AND status = 1 ORDER BY id ASC limit 1) as current_token, t.is_started
+		$doctors = DB::select('SELECT u.id, u.name, t.day, t.start_hour, t.end_hour, t.id as slot_id, (SELECT token_number FROM tokens WHERE timing_id = slot_id ORDER BY id DESC LIMIT 1) as total_token, (SELECT token_number FROM tokens WHERE timing_id = slot_id AND status = 1 ORDER BY id ASC limit 1) as current_token, t.is_started
 								FROM clinics c 
 								INNER JOIN clinic_user cu on c.id=cu.clinic_id 
 								INNER JOIN users u on u.id = cu.user_id 
