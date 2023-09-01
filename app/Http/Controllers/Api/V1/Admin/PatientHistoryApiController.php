@@ -8,7 +8,11 @@ use App\Http\Requests\StorePatientHistoryRequest;
 use App\Http\Requests\UpdatePatientHistoryRequest;
 use App\Http\Resources\Admin\PatientHistoryResource;
 use App\Models\PatientHistory;
+use App\Models\Patient;
+use App\Models\Clinic;
+use App\Models\User;
 use Gate;
+use DB;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,6 +60,46 @@ class PatientHistoryApiController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+	public function patient_history($id)
+	{
+		$member_ids = [];
+		$members = Patient::where('family_id', $id)->get(['id', 'name']);
+		
+		foreach($members as $member){
+			$member_ids[] = $member->id;
+		}
+		
+		$clinics = Clinic::join('patient_histories', 'clinics.id', '=', 'patient_histories.clinic_id')->whereIn('patient_histories.patient_id', $member_ids)->groupBy('clinics.id')
+                ->get(['clinics.id', 'clinics.name']);
+		
+		$doctors = User::join('patient_histories', 'users.id', '=', 'patient_histories.doctor_id')->whereIn('patient_histories.patient_id', $member_ids)->groupBy('users.id')
+				->get(['users.id', 'users.name']);
+				
+		return new PatientHistoryResource(['members'=>$members, 'clinics'=>$clinics, 'doctors'=>$doctors]);
+	}
 	
+	public function get_history(Request $request){
+		if(empty($request->member) || $request->member == ""){
+			return;
+		}
+		
+		$condition = "";
+		
+		if($request->clinic != ""){
+			$condition .= " AND clinic_id =".$request->clinic;
+		}
+		if($request->doctor != ""){
+			$condition .= " AND doctor_id =".$request->doctor;
+		}
+		
+		$history = DB::select('SELECT visit_date, prescription, comment, next_visit_date
+								FROM patient_histories								
+								WHERE patient_id =?
+								'.$condition.'
+								GROUP BY id
+								ORDER BY id DESC;', [$request->member]);		
+		
+		return new PatientHistoryResource($history);
+	}
 	
 }

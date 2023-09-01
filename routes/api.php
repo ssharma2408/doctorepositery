@@ -74,7 +74,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 	Route::get('{code}', 'ShortLinkController@shortenLink')->name('shorten.link'); */
 
     // Patient History	
-    Route::post('patient-histories/media', 'PatientHistoryApiController@storeMedia')->name('patient-histories.storeMedia');	
+    Route::post('patient-histories/media', 'PatientHistoryApiController@storeMedia')->name('patient-histories.storeMedia');
+	Route::get('patient_history/{id}', 'PatientHistoryApiController@patient_history')->name('patient_history');
+	Route::post('get_history', 'PatientHistoryApiController@get_history')->name('get_history');
     Route::apiResource('patient-histories', 'PatientHistoryApiController');
 
     // Token
