@@ -105,7 +105,7 @@ class TokenApiController extends Controller
 	
 	public function get_patients(Request $request)
 	{
-		$patients = DB::select('SELECT p.id, p.name, t.token_number, t.status, t.timing_id, tim.start_hour, tim.end_hour, t.is_online, t.id as token_id, tim.is_started
+		$patients = DB::select('SELECT p.id, p.name, t.token_number, t.status, t.timing_id, tim.start_hour, tim.end_hour, t.is_online, t.id as token_id, tim.is_started, t.estimated_time
 								FROM tokens t 
 								LEFT JOIN patients p ON p.id=t.patient_id
 								INNER JOIN timings tim on tim.id=t.timing_id								
@@ -145,6 +145,7 @@ class TokenApiController extends Controller
 										'comment' => $request->comment,
 										'patient_id' => $request->patient_id,
 										'doctor_id' => $request->doctor_id,
+										'clinic_id' => $request->clinic_id,
 										'next_visit_date' => (!empty($request->next_visit_date)) ? $request->next_visit_date : null,
 									];
 					

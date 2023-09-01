@@ -64,28 +64,30 @@ class RegisterController extends BaseController
 			$success['family_id'] =  $patient->family_id;
 			$success['mobile_number'] =  $patient->mobile_number;
 		}else{
-			
-			$clinic_arr = [];
-			$clinics = $exist_patient->clinics;
+			$data = [];
+			$members = Patient::where('family_id', $exist_patient->family_id)->get();			
+		
+			foreach($members as $member){
+				$clinics = DB::table('clinic_patient')->where(['clinic_id'=>$input['clinic_id'], 'patient_id'=>$member->id])->get();
 
-			foreach($clinics as $clinic){
-				$clinic_arr[] = $clinic->id;
+				if(count($clinics) == 0){
+					$cp = [];
+					$cp['patient_id'] = $member->id;
+					$cp['clinic_id'] = $input['clinic_id'];					
+					$data[] = $cp;
+				}
 			}
+	
+			if(!empty($data)){
+				DB::table('clinic_patient')->insert($data);
+			}
+			
 			$success['token'] =  $exist_patient->createToken('MyApp')->plainTextToken;
 			$success['name'] =  $exist_patient->name;
 			$success['role'] =  'Patient';
 			$success['id'] =  $exist_patient->id;
 			$success['family_id'] =  $exist_patient->family_id;
 			$success['mobile_number'] =  $exist_patient->mobile_number;
-			
-			if(!in_array($input['clinic_id'], $clinic_arr)){				
-				DB::table('clinic_patient')->insert(
-					 array(
-							'clinic_id'     =>   $input['clinic_id'], 
-							'patient_id'   =>   $exist_patient->id
-					 )
-				);
-			}			
 		}
 
         return $this->sendResponse($success, 'Patient register successfully.');

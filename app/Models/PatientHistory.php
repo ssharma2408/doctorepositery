@@ -33,6 +33,8 @@ class PatientHistory extends Model implements HasMedia
         'created_at',
         'updated_at',
         'deleted_at',
+        'next_visit_date',
+        'clinic_id',
     ];
 
     protected function serializeDate(DateTimeInterface $date)
