@@ -71,7 +71,15 @@ class TokenApiController extends Controller
 		}		
 		$timing_start = Timing::where('id', $request->slot_id)->first();
 
-		$token['current_token'] = (!$timing_start->is_started) ? "Not Started" : $token['current_token'];
+		$token['current_token'] = $token['current_token'];
+			
+		if($timing_start->is_paused || $timing_start->message != ""){
+			$token['message'] = $timing_start->message;
+		}
+		
+		if(!$timing_start->is_started && $timing_start->message == ""){
+			$token['current_token'] = "Not Started";
+		}	
 
 		return (new TokenResource($token))
             ->response()
@@ -112,6 +120,7 @@ class TokenApiController extends Controller
                                 WHERE t.status <> 0
 								AND t.clinic_id = ?
 								AND t.doctor_id = ?
+								AND tim.is_tokens_discarded = 0
                                 ORDER BY tim.start_hour, t.token_number;', [$request->clinic_id, $request->doctor_id]);
 		return (new TokenResource($patients))
             ->response()
@@ -170,7 +179,7 @@ class TokenApiController extends Controller
 							AND clinic_id=".$request->clinic_id."
 							AND timing_id=".$request->slot_id."
 							AND estimated_time > 0
-							AND status IN (1,2)"							
+							AND status IN (1,2)"
 				);
 			}
 		}
@@ -185,12 +194,24 @@ class TokenApiController extends Controller
 			
 		$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'status'=>1])->orderBy('id', 'ASC')->first();
 		
-		$token_arr = $exist_token[0];
+		$token_arr = isset($exist_token[0]) ? $exist_token[0] : [];
 		
-		$timing_start = Timing::where('id', $request->slot_id)->first();		
+		$timing_start = Timing::where('id', $request->slot_id)->first();
 		
-		$token_arr['current_token'] = (!$timing_start->is_started) ? "Not Started" : $current_token->token_number;		
+		$token_arr['current_token'] = isset($current_token->token_number) ? $current_token->token_number : [];
 		
+		$token_arr['message'] = "";
+		
+		if($timing_start->is_paused || $timing_start->message != ""){
+			$token_arr['message'] = $timing_start->message;
+		}
+		
+		if(!$timing_start->is_started && $timing_start->message == ""){
+			$token_arr['current_token'] = "Not Started";
+		}		
+
+		$token_arr['is_tokens_discarded'] = $timing_start->is_tokens_discarded;
+
 		return (new TokenResource($token_arr))
             ->response()
             ->setStatusCode(Response::HTTP_ACCEPTED);
@@ -281,11 +302,13 @@ class TokenApiController extends Controller
 
 		Timing::where('id', $slot_id)
 				   ->update([
-					   'is_started' =>  $status
+					   'is_started' =>  $status,
+					   'is_paused' => 0,
+					   'message' => ""
 					]);
 		$timing = Timing::where('id', $slot_id)->first();
 
-		$tokens = Token::where('timing_id', $slot_id)->orderBy('token_number', 'ASC')->get();
+		$tokens = Token::where('timing_id', $slot_id)->where('status', '!=' , 0)->orderBy('token_number', 'ASC')->get();
 
 		if(!empty($tokens)){
 			$i = 0;
@@ -303,4 +326,23 @@ class TokenApiController extends Controller
 
 		return true;
 	}
+	
+	public function process_pause(Request $request)
+	{
+		
+		$update_arr = array('message'=>$request->message);
+		
+		if($request->pause_type == "pause"){
+			$update_arr['is_paused'] = 1;
+			$update_arr['is_started'] = 0;
+		}else{
+			$update_arr['is_tokens_discarded'] = 1;
+		}
+		
+		Timing::where('id', $request->slot_id)
+				   ->update($update_arr);		
+
+		return true;
+		
+	}	
 }
