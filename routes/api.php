@@ -88,6 +88,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('tokens', 'TokenApiController');
 	Route::get('refresh_token/{slot_id}', 'TokenApiController@refresh_token');
 	Route::get('work_status/{slot_id}/{status}/{time}', 'TokenApiController@work_status');
+	Route::post('process_pause', 'TokenApiController@process_pause');
 	
 	//Pages
 	Route::get('pages/{clinic_id}', 'ContentPageApiController@index');
