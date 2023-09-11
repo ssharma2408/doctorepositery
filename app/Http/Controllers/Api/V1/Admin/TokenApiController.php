@@ -194,11 +194,11 @@ class TokenApiController extends Controller
 			
 		$current_token = Token::where(['clinic_id'=>$request->clinic_id, 'doctor_id'=>$request->doctor_id, 'status'=>1])->orderBy('id', 'ASC')->first();
 		
-		$token_arr = isset($exist_token[0]) ? $exist_token[0] : [];
+		$token_arr = $exist_token[0];
 		
 		$timing_start = Timing::where('id', $request->slot_id)->first();
 		
-		$token_arr['current_token'] = isset($current_token->token_number) ? $current_token->token_number : [];
+		$token_arr['current_token'] = $current_token->token_number;
 		
 		$token_arr['message'] = "";
 		
